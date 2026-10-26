@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.next/
+.turbo/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+
+.env
+.env.*
+!.env.example
+
+.DS_Store
+
+# Docs and Markdown stay local; only the README and license are versioned
+docs/
+*.md
+!/README.md
+!/LICENSE.md

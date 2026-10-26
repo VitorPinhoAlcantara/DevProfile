@@ -1,0 +1,19 @@
+# Local development: only Postgres runs in Docker, the apps run with `pnpm dev`.
+# Usage: docker compose -f compose.dev.yaml up -d
+name: devprofile-dev
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: devprofile
+      POSTGRES_PASSWORD: devprofile
+      POSTGRES_DB: devprofile
+    ports:
+      - '127.0.0.1:5432:5432'
+    volumes:
+      - postgres_dev_data:/var/lib/postgresql
+
+volumes:
+  postgres_dev_data:

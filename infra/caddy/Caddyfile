@@ -1,0 +1,17 @@
+{
+	admin off
+	# TLS is terminated by the Cloudflare tunnel; Caddy only routes plain HTTP inside the homelab.
+	auto_https off
+}
+
+:80 {
+	encode zstd gzip
+
+	handle /api/* {
+		reverse_proxy api:3001
+	}
+
+	handle {
+		reverse_proxy web:3000
+	}
+}
