@@ -16,6 +16,17 @@
 		respond 404
 	}
 
+	# Umami tracker under neutral names on our own domain, so blocklists that know
+	# its default paths don't drop the visits. Only these two routes are public.
+	handle /m/p.js {
+		rewrite * /script.js
+		reverse_proxy {$UMAMI_UPSTREAM}
+	}
+	handle /m/e {
+		rewrite * /api/send
+		reverse_proxy {$UMAMI_UPSTREAM}
+	}
+
 	handle {
 		reverse_proxy web:3000
 	}

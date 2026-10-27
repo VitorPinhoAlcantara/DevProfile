@@ -1,12 +1,14 @@
 import { GeistMono } from 'geist/font/mono';
 import { GeistSans } from 'geist/font/sans';
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { notFound } from 'next/navigation';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { ThemeProvider } from 'next-themes';
 import type { ReactNode } from 'react';
 import { routing } from '@/i18n/routing';
+import { UMAMI_SCRIPT, UMAMI_WEBSITE_ID } from '@/lib/analytics';
 import { SITE_URL } from '@/lib/site';
 import '../globals.css';
 
@@ -66,6 +68,15 @@ export default async function LocaleLayout({ children, params }: Props) {
         >
           <NextIntlClientProvider>{children}</NextIntlClientProvider>
         </ThemeProvider>
+        {UMAMI_WEBSITE_ID && (
+          <Script
+            src={UMAMI_SCRIPT}
+            data-website-id={UMAMI_WEBSITE_ID}
+            // Visits through the LAN IP or localhost aren't counted.
+            data-domains={new URL(SITE_URL).hostname}
+            strategy="afterInteractive"
+          />
+        )}
       </body>
     </html>
   );

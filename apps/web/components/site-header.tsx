@@ -8,6 +8,7 @@ import type { Locale } from '@devprofile/shared';
 import { useWorkspace } from '@/components/workspace-provider';
 import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import { routing } from '@/i18n/routing';
+import { trackClick } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 
 const localeLabels: Record<Locale, string> = { 'pt-BR': 'PT', en: 'EN' };
@@ -59,6 +60,7 @@ export function SiteHeader({
           <a
             href={`/api/v1/cv?lang=${locale}`}
             download
+            {...trackClick('cv-download', { lang: locale, place: 'header' })}
             className="hidden h-8 items-center gap-1.5 rounded-md border border-line px-2.5 text-sm text-muted transition hover:border-line-strong hover:text-fg sm:flex"
           >
             <Download className="size-4" aria-hidden />

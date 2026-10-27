@@ -55,3 +55,20 @@ Em desenvolvimento: `pnpm --filter @devprofile/api admin:create`. Depois do prim
 O `.env` precisa de `APP_SECRET` (criptografa os segredos do 2FA; não troque depois) e `REVALIDATE_TOKEN` (a api avisa o site para atualizar após salvar). Gere cada um com `openssl rand -base64 48`. Faça backup do volume `uploads` junto com o banco.
 
 O Caddy escuta na porta **7635**, a mesma do site antigo, para onde o túnel Cloudflare Zero Trust já aponta. O HTTPS fica a cargo do Cloudflare; dentro do homelab o tráfego é HTTP simples. Só o Caddy expõe porta no host — api, web e Postgres ficam na rede interna do Docker.
+
+### Backup
+
+Todo dia às 03:30, `~/Code/production/homelab-backup` roda `scripts/backup-dump.sh`. O backup inclui o banco, as imagens enviadas (volume `uploads`) e o `.env`. A cópia local fica em `~/backups/DevProfile` e uma cópia criptografada vai para o Google Drive, em `projects/DevProfile/backups`. O passo a passo de restauração está no README do `homelab-backup`.
+
+### Métricas de visita (Umami)
+
+O Umami é um projeto separado, em `~/Code/production/umami`, compartilhado com os outros sites do homelab. O painel fica em `http://<host>:20000`, só na rede local. Publicamente, o Caddy do portfólio expõe só o script (`/m/p.js` → `/script.js`) e o envio dos dados (`/m/e` → `/api/send`), repassados ao Umami pela máquina (`UMAMI_UPSTREAM`, padrão `host.docker.internal:20000`). Se o Umami estiver fora do ar, só a contagem para; o site continua no ar.
+
+O script só é carregado quando `UMAMI_WEBSITE_ID` está no `.env`.
+
+Eventos registrados:
+
+- `cv-download` (`lang`, `place`);
+- `contact-click` (`kind`, `place`);
+- `project-link` (`project`, `kind`);
+- `contact-form-sent`.

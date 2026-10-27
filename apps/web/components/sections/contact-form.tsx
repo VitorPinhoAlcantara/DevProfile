@@ -4,6 +4,7 @@ import { Send } from 'lucide-react';
 import { useTranslations } from 'next-intl';
 import { type FormEvent, useState } from 'react';
 import { apiErrorSchema, contactMessageInputSchema } from '@devprofile/shared';
+import { track } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 
 type Field = 'name' | 'email' | 'message';
@@ -55,6 +56,7 @@ export function ContactForm() {
       if (!res.ok) return setStatus('error');
       form.reset();
       setStatus('sent');
+      track('contact-form-sent');
     } catch {
       setStatus('error');
     }

@@ -3,6 +3,7 @@ import type { PublicContact } from '@devprofile/shared';
 import { ContactForm } from '@/components/sections/contact-form';
 import { ContactIcon, isExternal } from '@/components/ui/contact-icon';
 import { Section } from '@/components/ui/section';
+import { trackClick } from '@/lib/analytics';
 import { sections } from '@/lib/sections';
 
 export async function ContactSection({
@@ -26,6 +27,10 @@ export async function ContactSection({
                   {...(isExternal(contact.href)
                     ? { target: '_blank', rel: 'noreferrer' }
                     : {})}
+                  {...trackClick('contact-click', {
+                    kind: contact.kind,
+                    place: 'contact',
+                  })}
                   className="flex items-center gap-3 rounded-lg border border-line bg-panel px-4 py-3 transition hover:border-line-strong"
                 >
                   <ContactIcon

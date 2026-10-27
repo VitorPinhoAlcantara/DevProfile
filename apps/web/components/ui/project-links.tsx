@@ -2,6 +2,7 @@ import { ExternalLink, Globe, Store, BookOpen, PlayCircle } from 'lucide-react';
 import { getTranslations } from 'next-intl/server';
 import type { PublicProjectSummary } from '@devprofile/shared';
 import { GithubIcon } from '@/components/ui/brand-icons';
+import { trackClick } from '@/lib/analytics';
 
 type ProjectLink = PublicProjectSummary['links'][number];
 
@@ -23,7 +24,13 @@ function LinkIcon({ kind }: { kind: ProjectLink['kind'] }) {
   }
 }
 
-export async function ProjectLinks({ links }: { links: ProjectLink[] }) {
+export async function ProjectLinks({
+  project,
+  links,
+}: {
+  project: string;
+  links: ProjectLink[];
+}) {
   const t = await getTranslations('projects');
   if (links.length === 0) return null;
 
@@ -35,6 +42,7 @@ export async function ProjectLinks({ links }: { links: ProjectLink[] }) {
             href={link.href}
             target="_blank"
             rel="noreferrer"
+            {...trackClick('project-link', { project, kind: link.kind })}
             className="relative z-10 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg"
           >
             <LinkIcon kind={link.kind} />

@@ -4,6 +4,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import type { PublicPortfolio } from '@devprofile/shared';
 import { ContactIcon, isExternal } from '@/components/ui/contact-icon';
 import { Section } from '@/components/ui/section';
+import { trackClick } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 import { sections } from '@/lib/sections';
 import { DEFAULT_PHOTO } from '@/lib/site';
@@ -94,6 +95,7 @@ export async function AboutSection({
         <a
           href={`/api/v1/cv?lang=${locale}`}
           download
+          {...trackClick('cv-download', { lang: locale, place: 'hero' })}
           className="inline-flex h-9 items-center gap-2 rounded-md border border-accent bg-accent px-3.5 text-sm font-medium text-on-accent transition hover:opacity-90"
         >
           <Download className="size-4" aria-hidden />
@@ -136,6 +138,7 @@ function ContactButton({
     <a
       href={contact.href}
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
+      {...trackClick('contact-click', { kind: contact.kind, place: 'hero' })}
       className={cn(
         'inline-flex h-9 items-center gap-2 rounded-md border px-3.5 text-sm font-medium transition',
         className,

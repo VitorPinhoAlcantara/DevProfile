@@ -103,7 +103,7 @@ export default async function ProjectPage({ params }: Props) {
           {project.links.length > 0 && (
             <section>
               <h2 className="mb-2 text-sm font-medium text-fg">{t('links')}</h2>
-              <ProjectLinks links={project.links} />
+              <ProjectLinks project={project.slug} links={project.links} />
             </section>
           )}
           {project.skills.length > 0 && (

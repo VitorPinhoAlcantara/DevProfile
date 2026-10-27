@@ -10,6 +10,12 @@ services:
     volumes:
       - ./infra/caddy/Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
+    environment:
+      # Umami runs as its own project (~/Code/production/umami); Caddy reaches it
+      # through the host so neither stack depends on the other being up.
+      UMAMI_UPSTREAM: ${UMAMI_UPSTREAM:-host.docker.internal:20000}
+    extra_hosts:
+      - host.docker.internal:host-gateway
     depends_on:
       api:
         condition: service_healthy
@@ -62,6 +68,8 @@ services:
       REVALIDATE_TOKEN: ${REVALIDATE_TOKEN:?set REVALIDATE_TOKEN in .env}
       # Public address, used for canonical links, sitemap and Open Graph.
       SITE_URL: ${SITE_URL:-http://localhost:7635}
+      # Empty disables the visitor stats script.
+      UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
     depends_on:
       api:
         condition: service_healthy

@@ -63,7 +63,7 @@ export async function ProjectsSection({
               <ChipList items={project.skills.slice(0, 6)} />
             </div>
             <div className="mt-auto flex flex-wrap items-center justify-between gap-3 pt-5">
-              <ProjectLinks links={project.links} />
+              <ProjectLinks project={project.slug} links={project.links} />
               <span className="inline-flex items-center gap-1 text-sm text-accent">
                 {t('details')}
                 <ArrowRight

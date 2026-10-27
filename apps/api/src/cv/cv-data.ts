@@ -151,6 +151,20 @@ const printable = (href: string) =>
     .replace(/^www\./, '')
     .replace(/\/$/, '');
 
+/**
+ * Links that already carry a `?ref=` (visit tracking) get the CV language
+ * appended, so the stats tell the Portuguese and English CVs apart:
+ * `?ref=curriculo` becomes `?ref=curriculo-pt` / `?ref=curriculo-en`.
+ */
+export function withCvRef(href: string, lang: 'pt' | 'en') {
+  if (!/^https?:\/\//.test(href)) return href;
+  const url = new URL(href);
+  const ref = url.searchParams.get('ref');
+  if (!ref) return href;
+  url.searchParams.set('ref', `${ref}-${lang}`);
+  return url.toString();
+}
+
 /** Builds the CV from the canonical content, keeping only what is marked for the CV. */
 export function buildCvData(content: PortfolioContent, locale: Locale): CvData {
   const lang = locale === 'en' ? 'en' : 'pt';
@@ -207,7 +221,7 @@ export function buildCvData(content: PortfolioContent, locale: Locale): CvData {
         c.kind === 'PHONE' || c.kind === 'EMAIL'
           ? c.href
           : c.href.startsWith('http')
-            ? c.href
+            ? withCvRef(c.href, lang)
             : null,
     })),
   ];
@@ -254,7 +268,12 @@ export function buildCvData(content: PortfolioContent, locale: Locale): CvData {
       return {
         name: p.name,
         stack: stack.length ? stack.join(', ') : null,
-        link: site ? { text: printable(site.href), url: site.href } : null,
+        link: site
+          ? {
+              text: printable(site.href.split('?')[0]),
+              url: withCvRef(site.href, lang),
+            }
+          : null,
         period: p.period ? cvPeriod(p.period, lang) : null,
         bullets: p.cvBullets[lang].length
           ? p.cvBullets[lang]
