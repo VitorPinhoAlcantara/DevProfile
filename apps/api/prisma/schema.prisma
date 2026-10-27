@@ -1,0 +1,346 @@
+// Translatable text is stored as one column per language (`fooPt` / `fooEn`).
+// Dates use `AAAA-MM` (or `AAAA` where the month may be unknown) as text, which
+// sorts correctly and matches the shared Zod schemas.
+
+generator client {
+  provider            = "prisma-client"
+  output              = "../src/generated/prisma"
+  moduleFormat        = "esm"
+  importFileExtension = "js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum AvailabilityStatus {
+  OPEN_TO_WORK
+  NOT_LOOKING
+}
+
+enum WorkMode {
+  REMOTE
+  HYBRID
+  ONSITE
+}
+
+enum ContactKind {
+  EMAIL
+  PHONE
+  WHATSAPP
+  LINKEDIN
+  GITHUB
+  WEBSITE
+  OTHER
+}
+
+enum EmploymentType {
+  INTERNSHIP
+  FULL_TIME
+  PART_TIME
+  FREELANCE
+  VOLUNTEER
+}
+
+enum ProjectLinkKind {
+  REPOSITORY
+  WEBSITE
+  DEMO
+  STORE
+  DOCS
+}
+
+enum LanguageLevel {
+  BASIC
+  INTERMEDIATE
+  ADVANCED
+  FLUENT
+  NATIVE
+}
+
+enum CvProfile {
+  JUNIOR
+  INTERNSHIP
+}
+
+enum AuditAction {
+  CREATE
+  UPDATE
+  DELETE
+  REORDER
+  RESTORE
+}
+
+// ---------------------------------------------------------------- content
+
+/// Single row (id = 1).
+model Profile {
+  id                 Int                @id @default(1)
+  fullName           String
+  headlinePt         String
+  headlineEn         String
+  locationPt         String
+  locationEn         String
+  summaryPt          String
+  summaryEn          String
+  cvSummaryPt        String
+  cvSummaryEn        String
+  cvObjectivePt      String
+  cvObjectiveEn      String
+  availability       AvailabilityStatus
+  workModes          WorkMode[]
+  availabilityNotePt String
+  availabilityNoteEn String
+  photoId            String?            @unique
+  photo              Media?             @relation(fields: [photoId], references: [id], onDelete: SetNull)
+  updatedAt          DateTime           @updatedAt
+}
+
+model ContactChannel {
+  id         String      @id @default(uuid(7))
+  kind       ContactKind
+  label      String
+  value      String
+  href       String
+  showOnSite Boolean     @default(true)
+  showOnCv   Boolean     @default(true)
+  position   Int
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+
+  @@index([position])
+}
+
+model SkillCategory {
+  id        String   @id @default(uuid(7))
+  key       String   @unique
+  namePt    String
+  nameEn    String
+  position  Int
+  skills    Skill[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([position])
+}
+
+model Skill {
+  id          String        @id @default(uuid(7))
+  name        String        @unique
+  /// English name when it differs (soft skills); null means use `name`.
+  nameEn      String?
+  categoryId  String
+  category    SkillCategory @relation(fields: [categoryId], references: [id], onDelete: Cascade)
+  showOnSite  Boolean       @default(true)
+  showOnCv    Boolean       @default(true)
+  position    Int
+  experiences Experience[]
+  projects    Project[]
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([categoryId, position])
+}
+
+model Experience {
+  id             String         @id @default(uuid(7))
+  company        String
+  companyUrl     String?
+  rolePt         String
+  roleEn         String
+  employmentType EmploymentType
+  location       String?
+  workMode       WorkMode?
+  startDate      String
+  endDate        String?
+  summaryPt      String
+  summaryEn      String
+  cvBulletsPt    String[]
+  cvBulletsEn    String[]
+  skills         Skill[]
+  showOnSite     Boolean        @default(true)
+  showOnCv       Boolean        @default(true)
+  position       Int
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+
+  @@index([position])
+}
+
+model Project {
+  id          String        @id @default(uuid(7))
+  slug        String        @unique
+  name        String
+  taglinePt   String
+  taglineEn   String
+  summaryPt   String
+  summaryEn   String
+  cvBulletsPt String[]
+  cvBulletsEn String[]
+  /// README-style Markdown page; images point at /api/media/<key>.
+  bodyPt      String?
+  bodyEn      String?
+  startDate   String?
+  endDate     String?
+  featured    Boolean       @default(false)
+  links       ProjectLink[]
+  skills      Skill[]
+  coverId     String?       @unique
+  cover       Media?        @relation("ProjectCover", fields: [coverId], references: [id], onDelete: SetNull)
+  showOnSite  Boolean       @default(true)
+  showOnCv    Boolean       @default(true)
+  position    Int
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([position])
+}
+
+model ProjectLink {
+  id        String          @id @default(uuid(7))
+  projectId String
+  project   Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  kind      ProjectLinkKind
+  label     String
+  href      String
+  position  Int
+
+  @@index([projectId, position])
+}
+
+model Education {
+  id               String   @id @default(uuid(7))
+  institution      String
+  institutionShort String?
+  degreePt         String
+  degreeEn         String
+  startDate        String
+  endDate          String?
+  endIsExpected    Boolean  @default(false)
+  summaryPt        String
+  summaryEn        String
+  showOnSite       Boolean  @default(true)
+  showOnCv         Boolean  @default(true)
+  position         Int
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([position])
+}
+
+model Certification {
+  id            String   @id @default(uuid(7))
+  name          String
+  issuer        String
+  issuedAt      String
+  expiresAt     String?
+  credentialUrl String?
+  notePt        String
+  noteEn        String
+  showOnSite    Boolean  @default(true)
+  showOnCv      Boolean  @default(true)
+  position      Int
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([position])
+}
+
+model Language {
+  id         String        @id @default(uuid(7))
+  namePt     String
+  nameEn     String
+  level      LanguageLevel
+  showOnSite Boolean       @default(true)
+  showOnCv   Boolean       @default(true)
+  position   Int
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([position])
+}
+
+/// Single row (id = 1).
+model SiteSettings {
+  id               Int       @id @default(1)
+  cvProfile        CvProfile @default(JUNIOR)
+  /// Bumped on every content write; drives the `vAAAA.MM.DD` version shown on the site.
+  contentUpdatedAt DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+}
+
+model ContactMessage {
+  id        String    @id @default(uuid(7))
+  name      String
+  email     String
+  message   String
+  ip        String?
+  userAgent String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([createdAt])
+}
+
+model Media {
+  id           String   @id @default(uuid(7))
+  /// Path relative to the uploads volume.
+  storageKey   String   @unique
+  originalName String
+  mimeType     String
+  sizeBytes    Int
+  width        Int?
+  height       Int?
+  altPt        String?
+  altEn        String?
+  profile      Profile?
+  projectCover Project? @relation("ProjectCover")
+  createdAt    DateTime @default(now())
+}
+
+// ---------------------------------------------------------------- admin
+
+model User {
+  id            String     @id @default(uuid(7))
+  email         String     @unique
+  passwordHash  String
+  /// Encrypted TOTP secret; 2FA is active once `totpEnabledAt` is set.
+  totpSecret    String?
+  totpEnabledAt DateTime?
+  sessions      Session[]
+  auditLogs     AuditLog[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Session {
+  id         String   @id @default(uuid(7))
+  /// SHA-256 of the cookie token; the raw token is never stored.
+  tokenHash  String   @unique
+  userId     String
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expiresAt  DateTime
+  lastSeenAt DateTime @default(now())
+  ip         String?
+  userAgent  String?
+  createdAt  DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+}
+
+model AuditLog {
+  id        String      @id @default(uuid(7))
+  actorId   String?
+  actor     User?       @relation(fields: [actorId], references: [id], onDelete: SetNull)
+  action    AuditAction
+  entity    String
+  entityId  String
+  /// Snapshots used by the history screen to show diffs and undo changes.
+  before    Json?
+  after     Json?
+  createdAt DateTime    @default(now())
+
+  @@index([entity, entityId])
+  @@index([createdAt])
+}

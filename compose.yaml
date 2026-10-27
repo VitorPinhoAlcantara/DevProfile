@@ -20,10 +20,33 @@ services:
     build:
       context: .
       dockerfile: apps/api/Dockerfile
+      target: runtime
     image: devprofile-api
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+      APP_SECRET: ${APP_SECRET:?set APP_SECRET in .env}
+      REVALIDATE_TOKEN: ${REVALIDATE_TOKEN:?set REVALIDATE_TOKEN in .env}
+      WEB_INTERNAL_URL: http://web:3000
+      COOKIE_SECURE: ${COOKIE_SECURE:-true}
+    volumes:
+      - uploads:/data/uploads
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  migrate:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+      target: migrate
+    image: devprofile-migrate
+    restart: 'no'
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
+    volumes:
+      # The seed stores the project screenshots here.
+      - uploads:/data/uploads
     depends_on:
       postgres:
         condition: service_healthy
@@ -36,6 +59,12 @@ services:
     restart: unless-stopped
     environment:
       API_INTERNAL_URL: http://api:3001
+      REVALIDATE_TOKEN: ${REVALIDATE_TOKEN:?set REVALIDATE_TOKEN in .env}
+      # Public address, used for canonical links, sitemap and Open Graph.
+      SITE_URL: ${SITE_URL:-http://localhost:7635}
+    depends_on:
+      api:
+        condition: service_healthy
 
   postgres:
     image: postgres:18-alpine
@@ -57,3 +86,5 @@ services:
 volumes:
   caddy_data:
   postgres_data:
+  # Images uploaded through the admin (and the seed screenshots). Back this up with the database.
+  uploads:

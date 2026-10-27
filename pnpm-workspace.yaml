@@ -1,3 +1,16 @@
 packages:
   - apps/*
   - packages/*
+
+# pnpm only runs dependency install scripts that are listed here.
+allowBuilds:
+  '@prisma/engines': true
+  prisma: true
+  esbuild: true
+  # Optional native speedups pulled in by testcontainers (ssh2); the JS fallbacks are enough.
+  cpu-features: false
+  ssh2: false
+  protobufjs: false
+  # Ship prebuilt binaries through optional deps; install scripts aren't needed.
+  '@parcel/watcher': false
+  '@swc/core': false

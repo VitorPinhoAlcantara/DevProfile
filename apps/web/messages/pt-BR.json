@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Vitor Pinho Alcantara — Desenvolvedor Back-end",
+    "description": "Portfólio de Vitor Pinho Alcantara, desenvolvedor back-end e full stack em Aracaju (SE). Experiência com Node.js, NestJS, TypeScript, PostgreSQL e Docker."
+  },
+  "nav": {
+    "label": "Seções",
+    "about": "Sobre mim",
+    "experience": "Experiência",
+    "projects": "Projetos",
+    "skills": "Habilidades",
+    "education": "Formação",
+    "contact": "Contato"
+  },
+  "header": {
+    "home": "Início",
+    "devMode": "Modo dev",
+    "devModeHint": "Mostrar as respostas reais da API ao lado do conteúdo",
+    "toggleTheme": "Alternar tema claro/escuro",
+    "language": "Idioma",
+    "search": "Buscar…"
+  },
+  "hero": {
+    "openToWork": "Disponível para trabalhar",
+    "notLooking": "Não estou buscando oportunidades",
+    "workModes": {
+      "REMOTE": "remoto",
+      "HYBRID": "híbrido",
+      "ONSITE": "presencial"
+    },
+    "metrics": {
+      "experience": "{count, plural, one {experiência} other {experiências}}",
+      "projects": "{count, plural, one {projeto} other {projetos}}",
+      "certifications": "{count, plural, one {certificação} other {certificações}}"
+    },
+    "photoAlt": "Foto de {name}"
+  },
+  "experience": {
+    "present": "Atual",
+    "employmentTypes": {
+      "INTERNSHIP": "Estágio",
+      "FULL_TIME": "Tempo integral",
+      "PART_TIME": "Meio período",
+      "FREELANCE": "Freelance",
+      "VOLUNTEER": "Trabalho voluntário"
+    }
+  },
+  "projects": {
+    "details": "Ver detalhes",
+    "featured": "Destaque",
+    "back": "Voltar para os projetos",
+    "technologies": "Tecnologias",
+    "links": "Links",
+    "linkKinds": {
+      "REPOSITORY": "Código",
+      "WEBSITE": "Site",
+      "DEMO": "Demonstração",
+      "STORE": "Página",
+      "DOCS": "Documentação"
+    },
+    "notFoundTitle": "Projeto não encontrado",
+    "period": "Período"
+  },
+  "education": {
+    "certifications": "Certificações",
+    "languages": "Idiomas",
+    "expected": "previsão",
+    "validUntil": "válida até {date}",
+    "issuedBy": "Emitida por {issuer}",
+    "levels": {
+      "BASIC": "Básico",
+      "INTERMEDIATE": "Intermediário",
+      "ADVANCED": "Avançado",
+      "FLUENT": "Fluente",
+      "NATIVE": "Nativo"
+    }
+  },
+  "contact": {
+    "intro": "Quer conversar sobre uma vaga, projeto ou colaboração? Escolha o canal que preferir ou deixe uma mensagem.",
+    "formTitle": "Enviar mensagem",
+    "name": "Nome",
+    "email": "E-mail",
+    "message": "Mensagem",
+    "namePlaceholder": "Maria Silva",
+    "emailPlaceholder": "maria@empresa.com.br",
+    "messagePlaceholder": "Olá, Vitor! Gostaria de conversar sobre…",
+    "send": "Enviar mensagem",
+    "sending": "Enviando…",
+    "success": "Mensagem enviada. Respondo assim que possível.",
+    "error": "Não foi possível enviar agora. Tente de novo ou use o e-mail.",
+    "rateLimited": "Muitas mensagens seguidas. Tente de novo em alguns minutos.",
+    "errors": {
+      "name": "Informe seu nome.",
+      "email": "Informe um e-mail válido.",
+      "message": "Escreva pelo menos 10 caracteres."
+    }
+  },
+  "dev": {
+    "title": "Resposta da API",
+    "open": "Ver JSON",
+    "close": "Fechar",
+    "copy": "Copiar",
+    "copied": "Copiado",
+    "loading": "Carregando…",
+    "failed": "Falha ao chamar a API",
+    "requestBody": "Corpo da requisição (exemplo)",
+    "notExecuted": "Este endpoint grava dados, então não é chamado automaticamente. Use o formulário de contato ou o cURL.",
+    "hint": "Tudo o que você vê nesta página vem desta API.",
+    "docs": "Documentação da API"
+  },
+  "status": {
+    "online": "online",
+    "updated": "atualizado em {date}",
+    "builtWith": "NestJS · PostgreSQL · Next.js"
+  },
+  "palette": {
+    "placeholder": "Buscar seção, projeto ou ação…",
+    "empty": "Nada encontrado.",
+    "sections": "Seções",
+    "projects": "Projetos",
+    "actions": "Ações",
+    "toggleTheme": "Alternar tema",
+    "switchLanguage": "Switch to English",
+    "toggleDev": "Mostrar/ocultar modo dev",
+    "apiDocs": "Abrir documentação da API"
+  },
+  "notFound": {
+    "title": "Página não encontrada",
+    "description": "O endereço que você tentou abrir não existe.",
+    "back": "Voltar ao início"
+  }
+}

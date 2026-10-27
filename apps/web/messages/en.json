@@ -1,0 +1,132 @@
+{
+  "meta": {
+    "title": "Vitor Pinho Alcantara — Back-end Developer",
+    "description": "Portfolio of Vitor Pinho Alcantara, back-end and full stack developer based in Aracaju, Brazil. Experience with Node.js, NestJS, TypeScript, PostgreSQL, and Docker."
+  },
+  "nav": {
+    "label": "Sections",
+    "about": "About me",
+    "experience": "Experience",
+    "projects": "Projects",
+    "skills": "Skills",
+    "education": "Education",
+    "contact": "Contact"
+  },
+  "header": {
+    "home": "Home",
+    "devMode": "Dev mode",
+    "devModeHint": "Show the real API responses next to the content",
+    "toggleTheme": "Toggle light/dark theme",
+    "language": "Language",
+    "search": "Search…"
+  },
+  "hero": {
+    "openToWork": "Open to work",
+    "notLooking": "Not looking for opportunities",
+    "workModes": {
+      "REMOTE": "remote",
+      "HYBRID": "hybrid",
+      "ONSITE": "on-site"
+    },
+    "metrics": {
+      "experience": "{count, plural, one {position} other {positions}}",
+      "projects": "{count, plural, one {project} other {projects}}",
+      "certifications": "{count, plural, one {certification} other {certifications}}"
+    },
+    "photoAlt": "Photo of {name}"
+  },
+  "experience": {
+    "present": "Present",
+    "employmentTypes": {
+      "INTERNSHIP": "Internship",
+      "FULL_TIME": "Full-time",
+      "PART_TIME": "Part-time",
+      "FREELANCE": "Freelance",
+      "VOLUNTEER": "Volunteer work"
+    }
+  },
+  "projects": {
+    "details": "View details",
+    "featured": "Featured",
+    "back": "Back to projects",
+    "technologies": "Technologies",
+    "links": "Links",
+    "linkKinds": {
+      "REPOSITORY": "Code",
+      "WEBSITE": "Website",
+      "DEMO": "Demo",
+      "STORE": "Page",
+      "DOCS": "Docs"
+    },
+    "notFoundTitle": "Project not found",
+    "period": "Timeline"
+  },
+  "education": {
+    "certifications": "Certifications",
+    "languages": "Languages",
+    "expected": "expected",
+    "validUntil": "valid until {date}",
+    "issuedBy": "Issued by {issuer}",
+    "levels": {
+      "BASIC": "Basic",
+      "INTERMEDIATE": "Intermediate",
+      "ADVANCED": "Advanced",
+      "FLUENT": "Fluent",
+      "NATIVE": "Native"
+    }
+  },
+  "contact": {
+    "intro": "Want to talk about a role, a project, or a collaboration? Pick a channel or leave a message.",
+    "formTitle": "Send a message",
+    "name": "Name",
+    "email": "Email",
+    "message": "Message",
+    "namePlaceholder": "Jane Smith",
+    "emailPlaceholder": "jane@company.com",
+    "messagePlaceholder": "Hi Vitor! I'd like to talk about…",
+    "send": "Send message",
+    "sending": "Sending…",
+    "success": "Message sent. I'll get back to you soon.",
+    "error": "Couldn't send it right now. Try again or use email.",
+    "rateLimited": "Too many messages in a row. Try again in a few minutes.",
+    "errors": {
+      "name": "Enter your name.",
+      "email": "Enter a valid email.",
+      "message": "Write at least 10 characters."
+    }
+  },
+  "dev": {
+    "title": "API response",
+    "open": "View JSON",
+    "close": "Close",
+    "copy": "Copy",
+    "copied": "Copied",
+    "loading": "Loading…",
+    "failed": "API call failed",
+    "requestBody": "Request body (example)",
+    "notExecuted": "This endpoint writes data, so it isn't called automatically. Use the contact form or the cURL command.",
+    "hint": "Everything on this page comes from this API.",
+    "docs": "API documentation"
+  },
+  "status": {
+    "online": "online",
+    "updated": "updated {date}",
+    "builtWith": "NestJS · PostgreSQL · Next.js"
+  },
+  "palette": {
+    "placeholder": "Search a section, project, or action…",
+    "empty": "No results.",
+    "sections": "Sections",
+    "projects": "Projects",
+    "actions": "Actions",
+    "toggleTheme": "Toggle theme",
+    "switchLanguage": "Mudar para português",
+    "toggleDev": "Show/hide dev mode",
+    "apiDocs": "Open API docs"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "description": "The address you tried to open doesn't exist.",
+    "back": "Back to home"
+  }
+}

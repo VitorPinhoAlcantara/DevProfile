@@ -11,6 +11,11 @@
 		reverse_proxy api:3001
 	}
 
+	# Service-to-service hooks (api -> web) never come from outside.
+	handle /internal/* {
+		respond 404
+	}
+
 	handle {
 		reverse_proxy web:3000
 	}

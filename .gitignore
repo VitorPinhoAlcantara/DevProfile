@@ -17,3 +17,9 @@ docs/
 *.md
 !/README.md
 !/LICENSE.md
+
+# Prisma client is generated at build time
+apps/api/src/generated/
+
+# Uploaded images (local development)
+apps/api/uploads/
