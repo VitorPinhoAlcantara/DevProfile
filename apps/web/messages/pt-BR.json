@@ -18,7 +18,8 @@
     "devModeHint": "Mostrar as respostas reais da API ao lado do conteúdo",
     "toggleTheme": "Alternar tema claro/escuro",
     "language": "Idioma",
-    "search": "Buscar…"
+    "search": "Buscar…",
+    "cv": "Currículo"
   },
   "hero": {
     "openToWork": "Disponível para trabalhar",
@@ -33,7 +34,8 @@
       "projects": "{count, plural, one {projeto} other {projetos}}",
       "certifications": "{count, plural, one {certificação} other {certificações}}"
     },
-    "photoAlt": "Foto de {name}"
+    "photoAlt": "Foto de {name}",
+    "downloadCv": "Baixar currículo"
   },
   "experience": {
     "present": "Atual",
@@ -43,7 +45,8 @@
       "PART_TIME": "Meio período",
       "FREELANCE": "Freelance",
       "VOLUNTEER": "Trabalho voluntário"
-    }
+    },
+    "softSkills": "Competências"
   },
   "projects": {
     "details": "Ver detalhes",
@@ -59,7 +62,8 @@
       "DOCS": "Documentação"
     },
     "notFoundTitle": "Projeto não encontrado",
-    "period": "Período"
+    "period": "Período",
+    "softSkills": "Competências"
   },
   "education": {
     "certifications": "Certificações",

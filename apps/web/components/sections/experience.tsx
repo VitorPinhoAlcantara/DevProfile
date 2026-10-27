@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from 'next-intl/server';
 import type { Locale, PublicExperience } from '@devprofile/shared';
 import { ChipList } from '@/components/ui/chip';
 import { Section } from '@/components/ui/section';
+import { SoftSkills } from '@/components/ui/soft-skills';
 import { formatDuration, formatPeriod } from '@/lib/format';
 import { sections } from '@/lib/sections';
 
@@ -56,8 +57,9 @@ export async function ExperienceSection({
             <p className="mt-3 max-w-3xl leading-relaxed text-muted">
               {item.summary}
             </p>
-            <div className="mt-3">
+            <div className="mt-3 space-y-2">
               <ChipList items={item.skills} />
+              <SoftSkills label={t('softSkills')} items={item.softSkills} />
             </div>
           </li>
         ))}

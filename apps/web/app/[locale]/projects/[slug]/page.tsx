@@ -114,6 +114,14 @@ export default async function ProjectPage({ params }: Props) {
               <ChipList items={project.skills} />
             </section>
           )}
+          {project.softSkills.length > 0 && (
+            <section>
+              <h2 className="mb-2 text-sm font-medium text-fg">
+                {t('softSkills')}
+              </h2>
+              <ChipList items={project.softSkills} />
+            </section>
+          )}
         </aside>
       </article>
     </WorkspaceShell>

@@ -18,7 +18,8 @@
     "devModeHint": "Show the real API responses next to the content",
     "toggleTheme": "Toggle light/dark theme",
     "language": "Language",
-    "search": "Search…"
+    "search": "Search…",
+    "cv": "Resume"
   },
   "hero": {
     "openToWork": "Open to work",
@@ -33,7 +34,8 @@
       "projects": "{count, plural, one {project} other {projects}}",
       "certifications": "{count, plural, one {certification} other {certifications}}"
     },
-    "photoAlt": "Photo of {name}"
+    "photoAlt": "Photo of {name}",
+    "downloadCv": "Download resume"
   },
   "experience": {
     "present": "Present",
@@ -43,7 +45,8 @@
       "PART_TIME": "Part-time",
       "FREELANCE": "Freelance",
       "VOLUNTEER": "Volunteer work"
-    }
+    },
+    "softSkills": "Soft skills"
   },
   "projects": {
     "details": "View details",
@@ -59,7 +62,8 @@
       "DOCS": "Docs"
     },
     "notFoundTitle": "Project not found",
-    "period": "Timeline"
+    "period": "Timeline",
+    "softSkills": "Soft skills"
   },
   "education": {
     "certifications": "Certifications",

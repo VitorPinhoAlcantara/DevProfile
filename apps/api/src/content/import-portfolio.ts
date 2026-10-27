@@ -115,6 +115,7 @@ export async function importPortfolio(
           key: category.key,
           namePt: category.name.pt,
           nameEn: category.name.en,
+          kind: category.kind,
           position,
           skills: {
             create: category.skills.map((skill, skillPosition) => ({

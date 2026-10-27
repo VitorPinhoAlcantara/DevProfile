@@ -89,6 +89,7 @@ export async function exportPortfolio(db: Db): Promise<PortfolioContent> {
     skillCategories: categories.map((category) => ({
       key: category.key,
       name: both(category.namePt, category.nameEn),
+      kind: category.kind,
       skills: category.skills.map((skill) => ({
         name: skill.name,
         nameEn: skill.nameEn,
@@ -151,6 +152,6 @@ export async function exportPortfolio(db: Db): Promise<PortfolioContent> {
       showOnSite: l.showOnSite,
       showOnCv: l.showOnCv,
     })),
-    settings: { cvProfile: settings.cvProfile },
+    settings: { cvProfile: settings.cvProfile, cvFont: settings.cvFont },
   };
 }

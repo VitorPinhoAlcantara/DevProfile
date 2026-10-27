@@ -76,6 +76,22 @@ describe('public content API (e2e)', () => {
     expect(apiErrorSchema.parse(missing.body).error.code).toBe('NOT_FOUND');
   });
 
+  it('lists soft skills apart from technologies', async () => {
+    const res = await get('/api/v1/experience?lang=en').expect(200);
+    const rcdnc = (
+      res.body.data as {
+        company: string;
+        skills: string[];
+        softSkills: string[];
+      }[]
+    ).find((e) => e.company === 'RCDNC')!;
+
+    expect(rcdnc.skills).toContain('Node.js');
+    expect(rcdnc.skills).not.toContain('Teamwork');
+    // Soft skills are translated through their English name.
+    expect(rcdnc.softSkills).toContain('Teamwork');
+  });
+
   it('answers unknown routes with the error envelope', async () => {
     const res = await get('/api/v1/nothing-here').expect(404);
 

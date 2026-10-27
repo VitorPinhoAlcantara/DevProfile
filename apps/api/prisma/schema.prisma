@@ -58,9 +58,19 @@ enum LanguageLevel {
   NATIVE
 }
 
+enum SkillKind {
+  TECHNICAL
+  SOFT
+}
+
 enum CvProfile {
   JUNIOR
   INTERNSHIP
+}
+
+enum CvFont {
+  SANS
+  SERIF
 }
 
 enum AuditAction {
@@ -112,14 +122,15 @@ model ContactChannel {
 }
 
 model SkillCategory {
-  id        String   @id @default(uuid(7))
-  key       String   @unique
+  id        String    @id @default(uuid(7))
+  key       String    @unique
   namePt    String
   nameEn    String
+  kind      SkillKind @default(TECHNICAL)
   position  Int
   skills    Skill[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   @@index([position])
 }
@@ -264,6 +275,7 @@ model Language {
 model SiteSettings {
   id               Int       @id @default(1)
   cvProfile        CvProfile @default(JUNIOR)
+  cvFont           CvFont    @default(SANS)
   /// Bumped on every content write; drives the `vAAAA.MM.DD` version shown on the site.
   contentUpdatedAt DateTime  @default(now())
   updatedAt        DateTime  @updatedAt

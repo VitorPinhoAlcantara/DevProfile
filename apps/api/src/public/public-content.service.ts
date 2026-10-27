@@ -25,13 +25,26 @@ const byPosition = { position: 'asc' } as const;
 const visibleSkillNames = {
   where: visible,
   orderBy: [{ category: byPosition }, byPosition],
-  select: { name: true, nameEn: true },
+  select: { name: true, nameEn: true, category: { select: { kind: true } } },
 } satisfies Prisma.SkillFindManyArgs;
+type SkillRow = Prisma.SkillGetPayload<{
+  select: typeof visibleSkillNames.select;
+}>;
 
 const skillName = (
   skill: { name: string; nameEn: string | null },
   locale: Locale,
 ) => (locale === 'en' ? (skill.nameEn ?? skill.name) : skill.name);
+
+/** Technologies and soft skills, kept apart for display. */
+const splitSkills = (skills: SkillRow[], locale: Locale) => ({
+  skills: skills
+    .filter((skill) => skill.category.kind === 'TECHNICAL')
+    .map((skill) => skillName(skill, locale)),
+  softSkills: skills
+    .filter((skill) => skill.category.kind === 'SOFT')
+    .map((skill) => skillName(skill, locale)),
+});
 
 const projectInclude = {
   cover: { select: { storageKey: true } },
@@ -134,6 +147,7 @@ export class PublicContentService {
       .map((category) => ({
         key: category.key,
         name: localized(category, 'name', locale),
+        kind: category.kind,
         skills: category.skills.map((skill) => skillName(skill, locale)),
       }));
   }
@@ -154,7 +168,7 @@ export class PublicContentService {
       workMode: row.workMode,
       period: { start: row.startDate, end: row.endDate },
       summary: localized(row, 'summary', locale),
-      skills: row.skills.map((skill) => skillName(skill, locale)),
+      ...splitSkills(row.skills, locale),
     }));
   }
 
@@ -234,7 +248,7 @@ export class PublicContentService {
       featured: row.featured,
       period: row.startDate ? { start: row.startDate, end: row.endDate } : null,
       coverUrl: row.cover ? mediaUrl(row.cover.storageKey) : null,
-      skills: row.skills.map((skill) => skillName(skill, locale)),
+      ...splitSkills(row.skills, locale),
       links: row.links.map(({ kind, label, href }) => ({ kind, label, href })),
     };
   }

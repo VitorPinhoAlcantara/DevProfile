@@ -156,3 +156,23 @@ export const dashboardSchema = z
   })
   .meta({ id: 'Dashboard' });
 export type Dashboard = z.infer<typeof dashboardSchema>;
+
+export const cvCheckSchema = z
+  .object({
+    id: z.string(),
+    status: z.enum(['pass', 'warn', 'fail']),
+    label: z.string(),
+    detail: z.string().nullable(),
+  })
+  .meta({ id: 'CvCheck' });
+export type CvCheck = z.infer<typeof cvCheckSchema>;
+
+export const cvReportSchema = z
+  .object({
+    locale: z.enum(['pt-BR', 'en']),
+    pages: z.number(),
+    generatedAt: z.iso.datetime(),
+    checks: z.array(cvCheckSchema),
+  })
+  .meta({ id: 'CvReport' });
+export type CvReport = z.infer<typeof cvReportSchema>;

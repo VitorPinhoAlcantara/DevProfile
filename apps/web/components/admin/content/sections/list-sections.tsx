@@ -110,12 +110,15 @@ export function SkillsSection({ content, update }: SectionProps) {
           update((d) => void (d.skillCategories = skillCategories))
         }
         itemTitle={(c) => c.name.pt}
-        itemSubtitle={(c) => `${c.skills.length} itens`}
+        itemSubtitle={(c) =>
+          `${c.skills.length} itens${c.kind === 'SOFT' ? ' · comportamental' : ''}`
+        }
         addLabel="Adicionar categoria"
         emptyLabel="Nenhuma categoria."
         createItem={() => ({
           key: `categoria-${Date.now().toString(36)}`,
           name: emptyText(),
+          kind: 'TECHNICAL' as const,
           skills: [],
         })}
         renderItem={(category, set) => (
@@ -124,6 +127,16 @@ export function SkillsSection({ content, update }: SectionProps) {
               label="Nome da categoria"
               value={category.name}
               onChange={(name) => set({ ...category, name })}
+            />
+            <SelectField
+              label="Tipo"
+              value={category.kind}
+              options={{
+                TECHNICAL: 'Técnica — aparece como tecnologia',
+                SOFT: 'Comportamental — aparece à parte',
+              }}
+              onChange={(kind) => set({ ...category, kind })}
+              className="max-w-sm"
             />
             <ListEditor
               items={category.skills}
@@ -480,8 +493,18 @@ export function SettingsSection({ content, update }: SectionProps) {
         }
         className="max-w-md"
       />
+      <SelectField
+        label="Fonte do currículo"
+        value={content.settings.cvFont}
+        options={{
+          SANS: 'Source Sans 3 — sem serifa, leitura rápida na tela',
+          SERIF: 'New Computer Modern — serifada, estilo LaTeX/Jake’s Resume',
+        }}
+        onChange={(cvFont) => update((d) => void (d.settings.cvFont = cvFont))}
+        className="max-w-md"
+      />
       <p className="text-sm text-soft">
-        Define a ordem das seções no PDF gerado. Use Júnior para vagas
+        O modelo define a ordem das seções no PDF gerado. Use Júnior para vagas
         júnior/trainee e Estágio para programas de estágio, que filtram pela
         formação.
       </p>

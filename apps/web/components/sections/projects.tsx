@@ -5,6 +5,7 @@ import { ChipList } from '@/components/ui/chip';
 import { ProjectLinks } from '@/components/ui/project-links';
 import { Section } from '@/components/ui/section';
 import { Link } from '@/i18n/navigation';
+import { cn } from '@/lib/cn';
 import { sections } from '@/lib/sections';
 
 export async function ProjectsSection({
@@ -17,11 +18,19 @@ export async function ProjectsSection({
 
   return (
     <Section section={sections[2]} title={tNav('projects')}>
-      <ul className="grid gap-4 md:grid-cols-2">
+      {/*
+        Cards with a cover take two rows; cards without one take a single row.
+        `grid-flow-row-dense` then backfills the gaps, so two short cards stack
+        next to a tall one instead of a lone short card stretching to its height.
+      */}
+      <ul className="grid gap-4 md:grid-flow-row-dense md:grid-cols-2">
         {items.map((project) => (
           <li
             key={project.slug}
-            className="group relative flex flex-col overflow-hidden rounded-lg border border-line bg-panel p-5 transition hover:border-line-strong"
+            className={cn(
+              'group relative flex flex-col overflow-hidden rounded-lg border border-line bg-panel p-5 transition hover:border-line-strong',
+              project.coverUrl && 'md:row-span-2',
+            )}
           >
             {project.coverUrl && (
               <img

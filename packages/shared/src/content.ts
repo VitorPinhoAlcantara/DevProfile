@@ -44,6 +44,9 @@ export const languageLevels = [
   'NATIVE',
 ] as const;
 export const cvProfiles = ['JUNIOR', 'INTERNSHIP'] as const;
+export const cvFonts = ['SANS', 'SERIF'] as const;
+/** Technical skills are shown as "technologies"; soft skills are listed apart. */
+export const skillKinds = ['TECHNICAL', 'SOFT'] as const;
 
 export const profileSchema = z.object({
   fullName: z.string().trim().min(1),
@@ -75,6 +78,7 @@ export type ContactChannelContent = z.infer<typeof contactChannelSchema>;
 export const skillCategorySchema = z.object({
   key: slugSchema,
   name: localizedTextSchema,
+  kind: z.enum(skillKinds).default('TECHNICAL'),
   skills: z.array(
     visibilitySchema.extend({
       /** Canonical name, also used to link skills to experiences and projects. */
@@ -170,6 +174,7 @@ export type LanguageContent = z.infer<typeof languageSchema>;
 
 export const siteSettingsSchema = z.object({
   cvProfile: z.enum(cvProfiles),
+  cvFont: z.enum(cvFonts).default('SANS'),
 });
 export type SiteSettingsContent = z.infer<typeof siteSettingsSchema>;
 

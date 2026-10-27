@@ -1,6 +1,6 @@
 'use client';
 
-import { Code2, Moon, Search, Sun } from 'lucide-react';
+import { Code2, Download, Moon, Search, Sun } from 'lucide-react';
 import { useLocale, useTranslations } from 'next-intl';
 import { useTheme } from 'next-themes';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,7 @@ export function SiteHeader({
   version: string;
 }) {
   const t = useTranslations('header');
+  const locale = useLocale();
   const { devOpen, toggleDev, setPaletteOpen } = useWorkspace();
 
   return (
@@ -55,6 +56,14 @@ export function SiteHeader({
           >
             <Search className="size-4" aria-hidden />
           </button>
+          <a
+            href={`/api/v1/cv?lang=${locale}`}
+            download
+            className="hidden h-8 items-center gap-1.5 rounded-md border border-line px-2.5 text-sm text-muted transition hover:border-line-strong hover:text-fg sm:flex"
+          >
+            <Download className="size-4" aria-hidden />
+            {t('cv')}
+          </a>
           <LocaleSwitch label={t('language')} />
           <ThemeToggle label={t('toggleTheme')} />
           <button

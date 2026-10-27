@@ -144,6 +144,7 @@ export const portfolioSeed: PortfolioInput = {
     {
       key: 'comportamentais',
       name: { pt: 'Competências comportamentais', en: 'Soft skills' },
+      kind: 'SOFT',
       skills: [
         { name: 'Aprendizado contínuo', nameEn: 'Continuous learning' },
         { name: 'Trabalho em equipe', nameEn: 'Teamwork' },
@@ -183,15 +184,17 @@ export const portfolioSeed: PortfolioInput = {
         ],
       },
       skills: [
+        'TypeScript',
+        'JavaScript',
         'Node.js',
         'Next.js',
-        'JavaScript',
-        'HTML',
-        'CSS',
-        'Prisma',
+        'React',
         'PostgreSQL',
-        'GitHub',
+        'Prisma',
+        'Docker',
         'Trabalho em equipe',
+        'Comunicação',
+        'Resolução de problemas',
       ],
     },
     {

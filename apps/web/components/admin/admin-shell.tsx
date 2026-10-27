@@ -2,6 +2,7 @@
 
 import {
   ExternalLink,
+  FileDown,
   FileText,
   History,
   Image as ImageIcon,
@@ -48,6 +49,13 @@ const nav: {
     icon: FileText,
     method: 'PUT',
     endpoint: '/content',
+  },
+  {
+    href: '/admin/cv',
+    label: 'Currículo',
+    icon: FileDown,
+    method: 'GET',
+    endpoint: '/cv',
   },
   {
     href: '/admin/media',

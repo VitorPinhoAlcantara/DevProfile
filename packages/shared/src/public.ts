@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import {
+  skillKinds,
   availabilityStatuses,
   contactKinds,
   employmentTypes,
@@ -72,6 +73,7 @@ export const publicSkillCategorySchema = z
   .object({
     key: z.string(),
     name: z.string(),
+    kind: z.enum(skillKinds),
     skills: z.array(z.string()),
   })
   .meta({ id: 'SkillCategory' });
@@ -88,7 +90,10 @@ export const publicExperienceSchema = z
     workMode: z.enum(workModes).nullable(),
     period: periodSchema,
     summary: z.string(),
+    /** Technologies used. */
     skills: z.array(z.string()),
+    /** Soft skills (teamwork, communication…), listed apart from technologies. */
+    softSkills: z.array(z.string()),
   })
   .meta({ id: 'Experience' });
 export type PublicExperience = z.infer<typeof publicExperienceSchema>;
@@ -109,7 +114,10 @@ export const publicProjectSummarySchema = z
     featured: z.boolean(),
     period: periodSchema.nullable(),
     coverUrl: z.string().nullable(),
+    /** Technologies used. */
     skills: z.array(z.string()),
+    /** Soft skills, listed apart from technologies. */
+    softSkills: z.array(z.string()),
     links: z.array(publicProjectLinkSchema),
   })
   .meta({ id: 'ProjectSummary' });

@@ -1,6 +1,6 @@
-import { MapPin } from 'lucide-react';
+import { Download, MapPin } from 'lucide-react';
 import Image from 'next/image';
-import { getTranslations } from 'next-intl/server';
+import { getLocale, getTranslations } from 'next-intl/server';
 import type { PublicPortfolio } from '@devprofile/shared';
 import { ContactIcon, isExternal } from '@/components/ui/contact-icon';
 import { Section } from '@/components/ui/section';
@@ -21,7 +21,10 @@ export async function AboutSection({
   const workModes = profile.availability.workModes
     .map((mode) => t(`workModes.${mode}`))
     .join(' · ');
-  const [primary, ...others] = contacts;
+  const heroContacts = contacts
+    .filter((c) => c.kind !== 'PHONE' && c.kind !== 'WHATSAPP')
+    .slice(0, 3);
+  const locale = await getLocale();
 
   const metrics = [
     {
@@ -86,23 +89,24 @@ export async function AboutSection({
         </div>
       </div>
 
-      {contacts.length > 0 && (
-        <div className="mt-6 flex flex-wrap gap-2">
-          {primary && (
-            <ContactButton
-              contact={primary}
-              className="border-accent bg-accent text-on-accent hover:opacity-90"
-            />
-          )}
-          {others.map((contact) => (
-            <ContactButton
-              key={contact.href}
-              contact={contact}
-              className="border-line-strong text-fg hover:bg-panel-2"
-            />
-          ))}
-        </div>
-      )}
+      {/* The CV is the main action for recruiters; the phone stays in Contato. */}
+      <div className="mt-6 flex flex-wrap gap-2">
+        <a
+          href={`/api/v1/cv?lang=${locale}`}
+          download
+          className="inline-flex h-9 items-center gap-2 rounded-md border border-accent bg-accent px-3.5 text-sm font-medium text-on-accent transition hover:opacity-90"
+        >
+          <Download className="size-4" aria-hidden />
+          {t('downloadCv')}
+        </a>
+        {heroContacts.map((contact) => (
+          <ContactButton
+            key={contact.href}
+            contact={contact}
+            className="border-line-strong text-fg hover:bg-panel-2"
+          />
+        ))}
+      </div>
 
       <dl className="mt-6 grid grid-cols-3 gap-2 sm:max-w-md">
         {metrics.map((metric) => (
