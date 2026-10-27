@@ -42,6 +42,30 @@ docker compose up -d --build
 
 O serviço `migrate` roda antes da api a cada deploy: aplica as migrations e, com o banco vazio, carrega o seed.
 
+### CI/CD
+
+Pull requests só rodam as verificações. Um push na `main` roda as verificações e, se passarem, publica as imagens. O workflow fica em `.github/workflows/ci.yml` e roda nas máquinas do GitHub. Ele nunca acessa o homelab: o repositório é público, e um runner no homelab exporia a máquina a código de pull requests de terceiros.
+
+1. **Verificações:** typecheck, lint, formatação, testes unitários, testes e2e (Postgres via Testcontainers) e build.
+2. **Imagens:** `ghcr.io/vitorpinhoalcantara/devprofile-{api,migrate,web}`, com as tags `main` e o hash do commit.
+3. **Deploy:** no homelab, o timer `devprofile-deploy` roda `scripts/deploy.sh` a cada 5 minutos. O script:
+   - baixa as imagens `main` e, quando as três estão no mesmo commit novo, sobe essa versão;
+   - se ela não ficar saudável, volta para a anterior;
+   - grava o commit em produção em `DEVPROFILE_VERSION`, no `.env`;
+   - informa o resultado ao Gatus (**Homelab › Deploy DevProfile**).
+
+Para voltar a um commit específico, rode `scripts/deploy.sh <hash do commit>`. Uma migração que já rodou não é desfeita.
+
+Para instalar o timer (uma vez):
+
+```bash
+ln -sf ~/Code/production/DevProfile/infra/systemd/devprofile-deploy.{service,timer} ~/.config/systemd/user/
+systemctl --user daemon-reload
+systemctl --user enable --now devprofile-deploy.timer
+```
+
+As imagens no GHCR precisam ser **públicas**, já que o homelab baixa sem login. Elas não contêm segredos: o `.env` fica fora pelo `.dockerignore`.
+
 ### Painel admin
 
 O painel fica em `/admin`. Não existe cadastro público: o usuário é criado (ou tem a senha redefinida) pelo terminal, o que também encerra as sessões abertas:
@@ -59,6 +83,10 @@ O Caddy escuta na porta **7635**, a mesma do site antigo, para onde o túnel Clo
 ### Backup
 
 Todo dia às 03:30, `~/Code/production/homelab-backup` roda `scripts/backup-dump.sh`. O backup inclui o banco, as imagens enviadas (volume `uploads`) e o `.env`. A cópia local fica em `~/backups/DevProfile` e uma cópia criptografada vai para o Google Drive, em `projects/DevProfile/backups`. O passo a passo de restauração está no README do `homelab-backup`.
+
+### Monitoramento
+
+O Gatus (`~/Code/production/gatus`, painel na porta 20001, só na rede local) verifica o site, a API, o PDF do currículo e a origem sem o túnel. As verificações deste projeto ficam em `config/devprofile.yaml` dele.
 
 ### Métricas de visita (Umami)
 

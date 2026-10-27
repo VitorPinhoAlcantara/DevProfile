@@ -1,5 +1,9 @@
 name: devprofile
 
+# api, migrate and web run the images CI publishes to GHCR, at the commit in
+# DEVPROFILE_VERSION (set by scripts/deploy.sh). `docker compose up --build` still
+# builds them here, tagged `local` when DEVPROFILE_VERSION is unset.
+
 services:
   caddy:
     image: caddy:2.11-alpine
@@ -27,7 +31,7 @@ services:
       context: .
       dockerfile: apps/api/Dockerfile
       target: runtime
-    image: devprofile-api
+    image: ghcr.io/vitorpinhoalcantara/devprofile-api:${DEVPROFILE_VERSION:-local}
     restart: unless-stopped
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
@@ -46,7 +50,7 @@ services:
       context: .
       dockerfile: apps/api/Dockerfile
       target: migrate
-    image: devprofile-migrate
+    image: ghcr.io/vitorpinhoalcantara/devprofile-migrate:${DEVPROFILE_VERSION:-local}
     restart: 'no'
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
@@ -61,7 +65,7 @@ services:
     build:
       context: .
       dockerfile: apps/web/Dockerfile
-    image: devprofile-web
+    image: ghcr.io/vitorpinhoalcantara/devprofile-web:${DEVPROFILE_VERSION:-local}
     restart: unless-stopped
     environment:
       API_INTERNAL_URL: http://api:3001
