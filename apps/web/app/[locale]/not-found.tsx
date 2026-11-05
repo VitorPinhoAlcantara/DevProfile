@@ -11,7 +11,7 @@ export default async function NotFound() {
       <p className="mt-2 text-muted">{t('description')}</p>
       <Link
         href="/"
-        className="mt-6 inline-flex h-9 items-center rounded-md bg-accent px-4 text-sm font-medium text-on-accent"
+        className="mt-6 inline-flex h-9 items-center rounded-md bg-accent px-4 text-sm font-medium text-on-accent pointer-coarse:h-11"
       >
         {t('back')}
       </Link>

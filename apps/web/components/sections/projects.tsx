@@ -6,6 +6,7 @@ import { ProjectLinks } from '@/components/ui/project-links';
 import { Section } from '@/components/ui/section';
 import { Link } from '@/i18n/navigation';
 import { cn } from '@/lib/cn';
+import { responsiveImage } from '@/lib/media';
 import { sections } from '@/lib/sections';
 
 export async function ProjectsSection({
@@ -34,9 +35,12 @@ export async function ProjectsSection({
           >
             {project.coverUrl && (
               <img
-                src={project.coverUrl}
                 alt=""
                 loading="lazy"
+                {...responsiveImage(
+                  project.coverUrl,
+                  '(min-width: 1280px) 30rem, (min-width: 768px) 50vw, 100vw',
+                )}
                 className="-mx-5 -mt-5 mb-5 aspect-[16/9] w-[calc(100%+2.5rem)] max-w-none border-b border-line object-cover object-top"
               />
             )}

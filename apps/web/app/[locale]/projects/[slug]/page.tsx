@@ -11,6 +11,7 @@ import { WorkspaceShell } from '@/components/workspace-shell';
 import { Link } from '@/i18n/navigation';
 import { ApiNotFoundError, getPortfolio, getProject } from '@/lib/api';
 import { formatPeriod } from '@/lib/format';
+import { responsiveImage } from '@/lib/media';
 
 export const dynamic = 'force-dynamic';
 
@@ -52,7 +53,7 @@ export default async function ProjectPage({ params }: Props) {
     <WorkspaceShell portfolio={portfolio} meta={meta} withSections={false}>
       <Link
         href="/#projects"
-        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg"
+        className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg pointer-coarse:min-h-11"
       >
         <ArrowLeft className="size-4" aria-hidden />
         {t('back')}
@@ -74,8 +75,11 @@ export default async function ProjectPage({ params }: Props) {
             // Uploaded screenshot served by the API; plain <img> since Next's
             // optimizer can't reach /api/* behind Caddy.
             <img
-              src={project.coverUrl}
               alt=""
+              {...responsiveImage(
+                project.coverUrl,
+                '(min-width: 1024px) 53rem, 100vw',
+              )}
               className="mt-6 w-full rounded-lg border border-line"
             />
           )}

@@ -116,7 +116,7 @@ function DevPanelBody({ onClose }: { onClose?: () => void }) {
             onClick={onClose}
             aria-label={t('close')}
             className={cn(
-              'flex size-7 shrink-0 items-center justify-center rounded text-soft hover:bg-panel-2',
+              'flex size-7 shrink-0 items-center justify-center rounded text-soft hover:bg-panel-2 pointer-coarse:size-11',
               (result.state !== 'done' || section.method !== 'GET') &&
                 'ml-auto',
             )}
@@ -134,7 +134,7 @@ function DevPanelBody({ onClose }: { onClose?: () => void }) {
             onClick={() => setTab(option)}
             aria-pressed={tab === option}
             className={cn(
-              'border-b-2 px-2 py-1.5 font-mono text-xs transition',
+              'border-b-2 px-2 py-1.5 font-mono text-xs transition pointer-coarse:min-h-11 pointer-coarse:min-w-11',
               tab === option
                 ? 'border-accent text-fg'
                 : 'border-transparent text-soft hover:text-muted',
@@ -152,7 +152,7 @@ function DevPanelBody({ onClose }: { onClose?: () => void }) {
           type="button"
           onClick={copy}
           className={cn(
-            'flex items-center gap-1 rounded px-1.5 py-1 text-[0.6875rem] text-soft hover:text-fg',
+            'flex items-center gap-1 rounded px-1.5 py-1 text-[0.6875rem] text-soft hover:text-fg pointer-coarse:min-h-11',
             !(result.state === 'done' && section.method === 'GET') && 'ml-auto',
           )}
         >
@@ -216,7 +216,7 @@ export function DevDrawer() {
 
   return (
     <Drawer.Root open={open} onOpenChange={setOpen}>
-      <Drawer.Trigger className="fixed right-4 bottom-4 z-30 flex items-center gap-1.5 rounded-full border border-line-strong bg-panel px-3.5 py-2 font-mono text-xs text-fg shadow-lg xl:hidden">
+      <Drawer.Trigger className="fixed right-4 bottom-4 z-30 flex items-center gap-1.5 rounded-full border border-line-strong bg-panel px-3.5 py-2 font-mono text-xs text-fg shadow-lg xl:hidden pointer-coarse:min-h-11">
         <Braces className="size-3.5" aria-hidden />
         {t('open')}
       </Drawer.Trigger>

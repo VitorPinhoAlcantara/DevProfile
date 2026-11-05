@@ -69,7 +69,7 @@ export function SectionTabs() {
                 href={`#${section.id}`}
                 aria-current={active ? 'location' : undefined}
                 className={cn(
-                  'block border-b-2 px-2.5 py-2.5 text-sm transition',
+                  'block border-b-2 px-2.5 py-2.5 text-sm transition pointer-coarse:py-3',
                   active
                     ? 'border-accent text-fg'
                     : 'border-transparent text-muted',

@@ -64,7 +64,7 @@ export function ContactForm() {
 
   const fieldClass = (field: Field) =>
     cn(
-      'w-full rounded-md border bg-bg px-3 py-2 text-sm text-fg outline-none transition placeholder:text-soft focus:border-accent',
+      'w-full rounded-md border bg-bg px-3 py-2 text-sm text-fg outline-none transition placeholder:text-soft focus:border-accent pointer-coarse:min-h-11 pointer-coarse:text-base',
       errors[field] ? 'border-post' : 'border-line',
     );
 
@@ -141,7 +141,7 @@ export function ContactForm() {
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="inline-flex h-9 items-center gap-2 rounded-md bg-accent px-4 text-sm font-medium text-on-accent transition hover:opacity-90 disabled:opacity-60"
+          className="inline-flex h-9 items-center gap-2 rounded-md bg-accent px-4 text-sm font-medium text-on-accent transition hover:opacity-90 disabled:opacity-60 pointer-coarse:h-11"
         >
           <Send className="size-4" aria-hidden />
           {status === 'sending' ? t('sending') : t('send')}

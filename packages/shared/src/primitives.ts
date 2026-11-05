@@ -1,5 +1,15 @@
 import { z } from 'zod';
 
+/** Widths the API can resize an image to (`/api/media/<file>?w=640`). */
+export const mediaWidths = [
+  '320',
+  '480',
+  '640',
+  '960',
+  '1280',
+  '1600',
+] as const;
+
 export const locales = ['pt-BR', 'en'] as const;
 export const localeSchema = z.enum(locales);
 export type Locale = z.infer<typeof localeSchema>;

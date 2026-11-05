@@ -26,10 +26,10 @@ export function SiteHeader({
 
   return (
     <header className="sticky top-0 z-30 border-b border-line bg-bg/85 backdrop-blur">
-      <div className="mx-auto flex h-14 max-w-[110rem] items-center gap-3 px-4 sm:px-6">
+      <div className="mx-auto flex h-14 max-w-[110rem] items-center gap-3 px-4 sm:px-6 pointer-coarse:gap-2">
         <Link
           href="/"
-          className="flex min-w-0 items-center gap-2 font-semibold tracking-tight"
+          className="flex min-w-0 items-center gap-2 font-semibold tracking-tight pointer-coarse:min-h-11 pointer-coarse:text-sm"
           aria-label={t('home')}
         >
           <span className="truncate">{name}</span>
@@ -41,18 +41,18 @@ export function SiteHeader({
         <button
           type="button"
           onClick={() => setPaletteOpen(true)}
-          className="ml-auto hidden h-8 w-64 items-center gap-2 rounded-md border border-line px-2.5 text-sm text-soft transition hover:border-line-strong md:flex"
+          className="ml-auto hidden h-8 w-64 items-center gap-2 rounded-md border border-line px-2.5 text-sm text-soft transition hover:border-line-strong md:flex pointer-coarse:h-11"
         >
           <Search className="size-3.5" aria-hidden />
           {t('search')}
           <kbd className="ml-auto font-mono text-[0.6875rem]">Ctrl K</kbd>
         </button>
 
-        <div className="ml-auto flex items-center gap-1 md:ml-0">
+        <div className="ml-auto flex items-center gap-1 md:ml-0 pointer-coarse:gap-0">
           <button
             type="button"
             onClick={() => setPaletteOpen(true)}
-            className="flex size-8 items-center justify-center rounded-md text-muted hover:bg-panel-2 md:hidden"
+            className="flex size-8 items-center justify-center rounded-md text-muted hover:bg-panel-2 md:hidden pointer-coarse:size-11"
             aria-label={t('search')}
           >
             <Search className="size-4" aria-hidden />
@@ -61,7 +61,7 @@ export function SiteHeader({
             href={`/api/v1/cv?lang=${locale}`}
             download
             {...trackClick('cv-download', { lang: locale, place: 'header' })}
-            className="hidden h-8 items-center gap-1.5 rounded-md border border-line px-2.5 text-sm text-muted transition hover:border-line-strong hover:text-fg sm:flex"
+            className="hidden h-8 items-center gap-1.5 rounded-md border border-line px-2.5 text-sm text-muted transition hover:border-line-strong hover:text-fg sm:flex pointer-coarse:h-11"
           >
             <Download className="size-4" aria-hidden />
             {t('cv')}
@@ -74,7 +74,7 @@ export function SiteHeader({
             aria-pressed={devOpen}
             title={t('devModeHint')}
             className={cn(
-              'ml-1 hidden h-8 items-center gap-1.5 rounded-md border px-2.5 text-sm transition xl:flex',
+              'ml-1 hidden h-8 items-center gap-1.5 rounded-md border px-2.5 text-sm transition xl:flex pointer-coarse:h-11',
               devOpen
                 ? 'border-accent/40 bg-accent-soft text-accent'
                 : 'border-line text-muted hover:border-line-strong',
@@ -98,7 +98,7 @@ function LocaleSwitch({ label }: { label: string }) {
     <div
       role="group"
       aria-label={label}
-      className="flex h-8 items-center rounded-md border border-line p-0.5"
+      className="flex h-8 items-center rounded-md border border-line p-0.5 pointer-coarse:h-auto pointer-coarse:p-0"
     >
       {routing.locales.map((option) => (
         <button
@@ -107,7 +107,7 @@ function LocaleSwitch({ label }: { label: string }) {
           aria-pressed={option === locale}
           onClick={() => router.replace(pathname, { locale: option })}
           className={cn(
-            'h-full rounded px-2 font-mono text-xs transition',
+            'h-full rounded px-2 font-mono text-xs transition pointer-coarse:h-11 pointer-coarse:min-w-11',
             option === locale
               ? 'bg-panel-2 text-fg'
               : 'text-soft hover:text-muted',
@@ -131,7 +131,7 @@ function ThemeToggle({ label }: { label: string }) {
       type="button"
       onClick={() => setTheme(isDark ? 'light' : 'dark')}
       aria-label={label}
-      className="flex size-8 items-center justify-center rounded-md text-muted hover:bg-panel-2"
+      className="flex size-8 items-center justify-center rounded-md text-muted hover:bg-panel-2 pointer-coarse:size-11"
     >
       {isDark ? (
         <Moon className="size-4" aria-hidden />

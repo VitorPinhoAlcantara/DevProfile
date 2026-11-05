@@ -1,6 +1,7 @@
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
 import type { NestExpressApplication } from '@nestjs/platform-express';
+import { imageSize } from 'image-size';
 import request from 'supertest';
 import { portfolioSchema } from '@devprofile/shared';
 import type { PrismaClient } from '../src/generated/prisma/client.js';
@@ -59,6 +60,26 @@ describe('media (e2e)', () => {
 
     expect(res.headers['content-type']).toBe('image/jpeg');
     expect(res.headers['cache-control']).toContain('immutable');
+  });
+
+  it('serves resized WebP copies without enlarging the image', async () => {
+    const media = await storage.save(await readFile(seedImage), 'a.jpg');
+    const get = (query: string) =>
+      request(app.getHttpServer()).get(`${mediaUrl(media.storageKey)}${query}`);
+
+    const small = await get('?w=320').expect(200);
+    expect(small.headers['content-type']).toBe('image/webp');
+    expect(small.headers['cache-control']).toContain('immutable');
+    expect(imageSize(small.body as Buffer)).toMatchObject({
+      type: 'webp',
+      width: 320,
+      height: 200,
+    });
+
+    const large = await get('?w=1600').expect(200);
+    expect(imageSize(large.body as Buffer).width).toBe(1440);
+
+    await get('?w=321').expect(400);
   });
 
   it('refuses keys that are not content hashes', async () => {

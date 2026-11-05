@@ -1,7 +1,9 @@
 import { createHash } from 'node:crypto';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { access, mkdir, rename, writeFile } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
 import { join, resolve } from 'node:path';
 import { imageSize } from 'image-size';
+import sharp from 'sharp';
 import type { Media, PrismaClient } from '../generated/prisma/client.js';
 
 /** Public path images are served from (see MediaController). */
@@ -18,6 +20,40 @@ const MIME_BY_TYPE: Record<string, { ext: string; mime: string }> = {
 };
 
 export class UnsupportedMediaError extends Error {}
+
+// Outside the uploads volume: copies can always be rebuilt, so backups skip them.
+export const variantDir = join(tmpdir(), 'devprofile-media-variants');
+const pendingVariants = new Map<string, Promise<string>>();
+
+/** Name of a resized WebP copy in `variantDir`, built on the first request for it. */
+export function mediaVariant(storageKey: string, width: number) {
+  const name = `${storageKey}-${width}.webp`;
+  let job = pendingVariants.get(name);
+  if (!job) {
+    job = buildVariant(storageKey, width, name).finally(() =>
+      pendingVariants.delete(name),
+    );
+    pendingVariants.set(name, job);
+  }
+  return job;
+}
+
+async function buildVariant(storageKey: string, width: number, name: string) {
+  const target = join(variantDir, name);
+  try {
+    await access(target);
+    return name;
+  } catch {
+    await mkdir(variantDir, { recursive: true });
+  }
+  await sharp(join(mediaDir(), storageKey))
+    .rotate() // Metadata is dropped, so phone photos need their orientation applied.
+    .resize({ width, withoutEnlargement: true })
+    .webp({ quality: 80 })
+    .toFile(`${target}.tmp`);
+  await rename(`${target}.tmp`, target);
+  return name;
+}
 
 /**
  * Stores images under a content hash, so the same file is kept once and its URL

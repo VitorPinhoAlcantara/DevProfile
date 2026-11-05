@@ -174,7 +174,7 @@ export function SelectField<T extends string>({
           id={id}
           value={value}
           onChange={(e) => onChange(e.target.value as T)}
-          className="h-9 w-full rounded-md border border-line bg-bg px-3 text-sm text-fg outline-none focus:border-accent"
+          className="h-9 w-full rounded-md border border-line bg-bg px-3 text-sm text-fg outline-none focus:border-accent pointer-coarse:h-11 pointer-coarse:text-base"
         >
           {(Object.keys(options) as T[]).map((option) => (
             <option key={option} value={option}>

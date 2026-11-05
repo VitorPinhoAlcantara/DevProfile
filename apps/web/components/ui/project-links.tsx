@@ -43,7 +43,7 @@ export async function ProjectLinks({
             target="_blank"
             rel="noreferrer"
             {...trackClick('project-link', { project, kind: link.kind })}
-            className="relative z-10 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg"
+            className="relative z-10 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg pointer-coarse:min-h-11"
           >
             <LinkIcon kind={link.kind} />
             {/* Repo links with a generic label read better as "Código"/"Code". */}

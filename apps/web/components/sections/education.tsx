@@ -76,7 +76,7 @@ export async function EducationSection({
                         href={cert.credentialUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="inline-flex items-center gap-1 hover:underline"
+                        className="inline-flex items-center gap-1 hover:underline pointer-coarse:min-h-11"
                       >
                         {cert.name}
                         <ExternalLink className="size-3" aria-hidden />

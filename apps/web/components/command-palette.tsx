@@ -66,7 +66,7 @@ export function CommandPalette({
     >
       <Command.Input
         placeholder={t('placeholder')}
-        className="w-full border-b border-line bg-transparent px-4 py-3 text-sm text-fg outline-none placeholder:text-soft focus-visible:outline-none"
+        className="w-full border-b border-line bg-transparent px-4 py-3 text-sm text-fg outline-none placeholder:text-soft focus-visible:outline-none pointer-coarse:text-base"
       />
       <Command.List className="max-h-[50vh] overflow-y-auto p-2">
         <Command.Empty className="px-3 py-6 text-center text-sm text-soft">
@@ -160,7 +160,7 @@ function Item({
   return (
     <Command.Item
       onSelect={onSelect}
-      className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm text-muted data-[selected=true]:bg-panel-2 data-[selected=true]:text-fg"
+      className="flex cursor-pointer items-center gap-2.5 rounded-md px-2 py-2 text-sm text-muted data-[selected=true]:bg-panel-2 data-[selected=true]:text-fg pointer-coarse:py-3"
     >
       <span className="text-soft" aria-hidden>
         {icon}

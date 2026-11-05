@@ -34,7 +34,7 @@ export async function ExperienceSection({
                       href={item.companyUrl}
                       target="_blank"
                       rel="noreferrer"
-                      className="hover:text-fg hover:underline"
+                      className="hover:text-fg hover:underline pointer-coarse:inline-flex pointer-coarse:min-h-11 pointer-coarse:items-center"
                     >
                       {item.company}
                     </a>

@@ -48,7 +48,8 @@ export async function AboutSection({
     <Section section={sections[0]} title={tNav('about')} hideTitle>
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
         <Image
-          src={profile.photoUrl ?? DEFAULT_PHOTO}
+          // Shown at 112 px at most; 320 keeps it sharp on 3x screens.
+          src={profile.photoUrl ? `${profile.photoUrl}?w=320` : DEFAULT_PHOTO}
           alt={t('photoAlt', { name: profile.fullName })}
           width={112}
           height={112}
@@ -96,7 +97,7 @@ export async function AboutSection({
           href={`/api/v1/cv?lang=${locale}`}
           download
           {...trackClick('cv-download', { lang: locale, place: 'hero' })}
-          className="inline-flex h-9 items-center gap-2 rounded-md border border-accent bg-accent px-3.5 text-sm font-medium text-on-accent transition hover:opacity-90"
+          className="inline-flex h-9 items-center gap-2 rounded-md border border-accent bg-accent px-3.5 text-sm font-medium text-on-accent transition hover:opacity-90 pointer-coarse:h-11"
         >
           <Download className="size-4" aria-hidden />
           {t('downloadCv')}
@@ -140,7 +141,7 @@ function ContactButton({
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
       {...trackClick('contact-click', { kind: contact.kind, place: 'hero' })}
       className={cn(
-        'inline-flex h-9 items-center gap-2 rounded-md border px-3.5 text-sm font-medium transition',
+        'inline-flex h-9 items-center gap-2 rounded-md border px-3.5 text-sm font-medium transition pointer-coarse:h-11',
         className,
       )}
     >

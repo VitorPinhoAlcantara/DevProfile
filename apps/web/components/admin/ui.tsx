@@ -13,7 +13,7 @@ import { cn } from '@/lib/cn';
 // Small building blocks for the admin forms, styled with the site's tokens.
 
 const controlClass =
-  'w-full rounded-md border border-line bg-bg px-3 py-2 text-sm text-fg outline-none transition placeholder:text-soft focus:border-accent disabled:opacity-60';
+  'w-full rounded-md border border-line bg-bg px-3 py-2 text-sm text-fg outline-none transition placeholder:text-soft focus:border-accent disabled:opacity-60 pointer-coarse:min-h-11 pointer-coarse:text-base';
 
 export function Button({
   variant = 'secondary',
@@ -27,7 +27,7 @@ export function Button({
       type="button"
       {...props}
       className={cn(
-        'inline-flex h-9 items-center justify-center gap-1.5 rounded-md px-3.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50',
+        'inline-flex h-9 items-center justify-center gap-1.5 rounded-md px-3.5 text-sm font-medium transition disabled:cursor-not-allowed disabled:opacity-50 pointer-coarse:h-11',
         variant === 'primary' && 'bg-accent text-on-accent hover:opacity-90',
         variant === 'secondary' &&
           'border border-line-strong text-fg hover:bg-panel-2',
@@ -52,7 +52,7 @@ export function IconButton({
       title={label}
       {...props}
       className={cn(
-        'flex size-8 items-center justify-center rounded-md text-soft transition hover:bg-panel-2 hover:text-fg disabled:opacity-30',
+        'flex size-8 items-center justify-center rounded-md text-soft transition hover:bg-panel-2 hover:text-fg disabled:opacity-30 pointer-coarse:size-11',
         className,
       )}
     />
@@ -107,7 +107,10 @@ export function Select({
   ...props
 }: SelectHTMLAttributes<HTMLSelectElement>) {
   return (
-    <select {...props} className={cn(controlClass, 'h-9 py-0', className)} />
+    <select
+      {...props}
+      className={cn(controlClass, 'h-9 py-0 pointer-coarse:h-11', className)}
+    />
   );
 }
 
@@ -121,7 +124,7 @@ export function Checkbox({
   onChange: (checked: boolean) => void;
 }) {
   return (
-    <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted select-none">
+    <label className="inline-flex cursor-pointer items-center gap-2 text-sm text-muted select-none pointer-coarse:min-h-11">
       <input
         type="checkbox"
         checked={checked}
