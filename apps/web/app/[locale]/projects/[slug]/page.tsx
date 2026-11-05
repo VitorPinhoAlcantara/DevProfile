@@ -34,7 +34,11 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: project.tagline,
     alternates: {
       canonical: locale === 'en' ? `/en/projects/${slug}` : `/projects/${slug}`,
-      languages: { 'pt-BR': `/projects/${slug}`, en: `/en/projects/${slug}` },
+      languages: {
+        'pt-BR': `/projects/${slug}`,
+        en: `/en/projects/${slug}`,
+        'x-default': `/projects/${slug}`,
+      },
     },
   };
 }

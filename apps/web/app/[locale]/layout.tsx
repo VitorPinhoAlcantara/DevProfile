@@ -30,7 +30,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     description: t('description'),
     alternates: {
       canonical: locale === routing.defaultLocale ? '/' : `/${locale}`,
-      languages: { 'pt-BR': '/', en: '/en' },
+      languages: { 'pt-BR': '/', en: '/en', 'x-default': '/' },
     },
     openGraph: {
       type: 'profile',
