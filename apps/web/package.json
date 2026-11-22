@@ -2,6 +2,7 @@
   "name": "@devprofile/web",
   "version": "0.0.0",
   "private": true,
+  "license": "UNLICENSED",
   "type": "module",
   "scripts": {
     "build": "next build",
