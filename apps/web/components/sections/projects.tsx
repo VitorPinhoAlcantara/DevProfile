@@ -29,7 +29,7 @@ export async function ProjectsSection({
             >
               {project.coverUrl && (
                 <img
-                  alt=""
+                  alt={project.name}
                   loading="lazy"
                   {...responsiveImage(
                     project.coverUrl,

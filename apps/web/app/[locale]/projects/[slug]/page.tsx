@@ -101,15 +101,12 @@ export default async function ProjectPage({ params }: Props) {
           <p className="mt-2 text-lg text-muted">{project.tagline}</p>
 
           {project.coverUrl && (
-            // Uploaded screenshot served by the API; plain <img> since Next's
-            // optimizer can't reach /api/* behind Caddy.
             <img
-              alt=""
+              alt={project.name}
               {...responsiveImage(
                 project.coverUrl,
                 '(min-width: 1024px) 53rem, 100vw',
               )}
-              // w-auto: small images (icons) keep their size instead of being upscaled.
               className="mt-6 h-auto w-auto max-w-full rounded-lg border border-line"
             />
           )}

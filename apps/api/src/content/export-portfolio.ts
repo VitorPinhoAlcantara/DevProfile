@@ -43,14 +43,22 @@ export async function exportPortfolio(db: Db): Promise<PortfolioContent> {
     }),
     db.experience.findMany({
       orderBy: byPosition,
-      include: { skills: { select: { name: true }, orderBy: byPosition } },
+      include: {
+        skills: {
+          select: { name: true },
+          orderBy: [{ category: byPosition }, byPosition],
+        },
+      },
     }),
     db.project.findMany({
       orderBy: byPosition,
       include: {
         cover: { select: { storageKey: true } },
         links: { orderBy: byPosition },
-        skills: { select: { name: true }, orderBy: byPosition },
+        skills: {
+          select: { name: true },
+          orderBy: [{ category: byPosition }, byPosition],
+        },
       },
     }),
     db.education.findMany({ orderBy: byPosition }),

@@ -147,6 +147,15 @@ describe('admin API (e2e)', () => {
       );
 
       expect(again.content).toEqual(current.content);
+
+      await authed
+        .put('/api/admin/content')
+        .send({ content: again.content, version: again.version })
+        .expect(200);
+      const [latest] = historyEntrySchema
+        .array()
+        .parse((await authed.get('/api/admin/history').expect(200)).body);
+      expect(latest).toMatchObject({ changed: [], details: [] });
     });
 
     it('saves edits, shows them on the public API and records history', async () => {
