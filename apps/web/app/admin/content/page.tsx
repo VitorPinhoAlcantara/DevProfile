@@ -7,7 +7,6 @@ import { ContentEditor } from '@/components/admin/content/content-editor';
 export default function ContentPage() {
   return (
     <AdminShell>
-      {/* The editor reads ?section= from the URL. */}
       <Suspense>
         <ContentEditor />
       </Suspense>

@@ -67,7 +67,6 @@ describe('public content API (e2e)', () => {
     expect(project.summary).toBe(
       seed.projects.find((p) => p.slug === 'streeturban')!.summary.en,
     );
-    // Skills come back in catalog order, not insertion order.
     expect(project.skills.indexOf('TypeScript')).toBeLessThan(
       project.skills.indexOf('NestJS'),
     );
@@ -88,7 +87,6 @@ describe('public content API (e2e)', () => {
 
     expect(rcdnc.skills).toContain('Node.js');
     expect(rcdnc.skills).not.toContain('Teamwork');
-    // Soft skills are translated through their English name.
     expect(rcdnc.softSkills).toContain('Teamwork');
   });
 
@@ -116,7 +114,6 @@ describe('public content API (e2e)', () => {
         '/api/v1/contact',
       ]),
     );
-    // Every $ref must point at a component that exists.
     const refs =
       JSON.stringify(doc).match(/#\/components\/schemas\/\w+/g) ?? [];
     for (const ref of new Set(refs)) {

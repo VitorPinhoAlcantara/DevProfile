@@ -6,7 +6,6 @@ import { SectionNav, SectionTabs } from '@/components/section-nav';
 import { useWorkspace } from '@/components/workspace-provider';
 import { cn } from '@/lib/cn';
 
-/** Three columns on wide screens while dev mode is on, two otherwise. */
 export function WorkspaceGrid({ children }: { children: ReactNode }) {
   const { devOpen } = useWorkspace();
 

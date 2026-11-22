@@ -16,7 +16,6 @@
 		reverse_proxy api:3001
 	}
 
-	# Short links (alcantara.dev.br/r/<slug>) live in the api.
 	handle /r/* {
 		rewrite * /api{uri}
 		reverse_proxy api:3001

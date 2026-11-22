@@ -14,9 +14,6 @@ import {
   yearMonthSchema,
 } from './primitives.js';
 
-// Shapes returned by the public API (`/api/v1/*`), already in the requested language.
-// `.meta({ id })` names each schema in the generated OpenAPI document.
-
 export const localeQuerySchema = z
   .object({
     lang: localeSchema
@@ -29,7 +26,6 @@ export type LocaleQuery = z.infer<typeof localeQuerySchema>;
 export const responseMetaSchema = z
   .object({
     locale: localeSchema,
-    /** `vAAAA.MM.DD` of the last content change. */
     version: z.string(),
     updatedAt: z.iso.datetime(),
   })
@@ -90,9 +86,7 @@ export const publicExperienceSchema = z
     workMode: z.enum(workModes).nullable(),
     period: periodSchema,
     summary: z.string(),
-    /** Technologies used. */
     skills: z.array(z.string()),
-    /** Soft skills (teamwork, communication…), listed apart from technologies. */
     softSkills: z.array(z.string()),
   })
   .meta({ id: 'Experience' });
@@ -114,9 +108,7 @@ export const publicProjectSummarySchema = z
     featured: z.boolean(),
     period: periodSchema.nullable(),
     coverUrl: z.string().nullable(),
-    /** Technologies used. */
     skills: z.array(z.string()),
-    /** Soft skills, listed apart from technologies. */
     softSkills: z.array(z.string()),
     links: z.array(publicProjectLinkSchema),
   })
@@ -126,7 +118,6 @@ export type PublicProjectSummary = z.infer<typeof publicProjectSummarySchema>;
 export const publicProjectSchema = publicProjectSummarySchema
   .extend({
     summary: z.string(),
-    /** Markdown, README-style. `null` when only the summary exists. */
     body: z.string().nullable(),
   })
   .meta({ id: 'Project' });
@@ -164,7 +155,6 @@ export const publicLanguageSchema = z
   .meta({ id: 'Language' });
 export type PublicLanguage = z.infer<typeof publicLanguageSchema>;
 
-/** Everything the home page needs, in one request. */
 export const publicPortfolioSchema = z
   .object({
     profile: publicProfileSchema,
@@ -179,7 +169,6 @@ export const publicPortfolioSchema = z
   .meta({ id: 'Portfolio' });
 export type PublicPortfolio = z.infer<typeof publicPortfolioSchema>;
 
-/** Wraps a payload in the `{ data, meta }` envelope every GET returns. */
 export function envelopeSchema<T extends z.ZodType>(data: T) {
   return z.object({ data, meta: responseMetaSchema });
 }
@@ -187,7 +176,6 @@ export type Envelope<T> = { data: T; meta: ResponseMeta };
 
 export const contactMessageInputSchema = z
   .object({
-    // Messages are shown as-is next to the form fields.
     name: z
       .string()
       .trim()

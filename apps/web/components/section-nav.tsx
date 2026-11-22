@@ -6,7 +6,6 @@ import { MethodPill } from '@/components/ui/method-pill';
 import { cn } from '@/lib/cn';
 import { sections, shortPath } from '@/lib/sections';
 
-/** Desktop sidebar: human label first, endpoint underneath. */
 export function SectionNav() {
   const t = useTranslations('nav');
   const { activeSection } = useWorkspace();
@@ -50,7 +49,6 @@ export function SectionNav() {
   );
 }
 
-/** Mobile/tablet: horizontal strip of sections under the header. */
 export function SectionTabs() {
   const t = useTranslations('nav');
   const { activeSection } = useWorkspace();

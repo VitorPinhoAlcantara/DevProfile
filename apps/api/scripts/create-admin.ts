@@ -8,7 +8,6 @@ import { MIN_PASSWORD_LENGTH } from '@devprofile/shared';
 import { hashPassword } from '../src/auth/crypto.js';
 import { PrismaClient } from '../src/generated/prisma/client.js';
 
-/** Reads a line without echoing it to the terminal. */
 async function askHidden(question: string): Promise<string> {
   stdout.write(question);
   stdin.setRawMode?.(true);

@@ -22,7 +22,6 @@ import {
 } from '../labels';
 import type { SectionProps } from '../types';
 
-/** Skills grouped by category, as the pickers show them. */
 export function skillCatalog(content: PortfolioContent) {
   return content.skillCategories.map((category) => ({
     category: category.name.pt,

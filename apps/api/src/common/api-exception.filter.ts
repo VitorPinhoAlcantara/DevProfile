@@ -29,7 +29,6 @@ const securityStatuses = new Set([
   HttpStatus.TOO_MANY_REQUESTS,
 ]);
 
-/** Turns every error into the `ApiError` envelope documented in OpenAPI. */
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
   private readonly logger = new Logger(ApiExceptionFilter.name);

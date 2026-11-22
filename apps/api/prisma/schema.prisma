@@ -81,9 +81,6 @@ enum AuditAction {
   RESTORE
 }
 
-// ---------------------------------------------------------------- content
-
-/// Single row (id = 1).
 model Profile {
   id                 Int                @id @default(1)
   fullName           String
@@ -189,7 +186,6 @@ model Project {
   summaryEn   String
   cvBulletsPt String[]
   cvBulletsEn String[]
-  /// README-style Markdown page; images point at /api/media/<key>.
   bodyPt      String?
   bodyEn      String?
   startDate   String?
@@ -272,12 +268,10 @@ model Language {
   @@index([position])
 }
 
-/// Single row (id = 1).
 model SiteSettings {
   id               Int       @id @default(1)
   cvProfile        CvProfile @default(JUNIOR)
   cvFont           CvFont    @default(SANS)
-  /// Bumped on every content write; drives the `vAAAA.MM.DD` version shown on the site.
   contentUpdatedAt DateTime  @default(now())
   updatedAt        DateTime  @updatedAt
 }
@@ -297,7 +291,6 @@ model ContactMessage {
 
 model Media {
   id           String   @id @default(uuid(7))
-  /// Path relative to the uploads volume.
   storageKey   String   @unique
   originalName String
   mimeType     String
@@ -310,8 +303,6 @@ model Media {
   projectCover Project? @relation("ProjectCover")
   createdAt    DateTime @default(now())
 }
-
-// ---------------------------------------------------------------- admin
 
 model User {
   id            String     @id @default(uuid(7))
@@ -349,7 +340,6 @@ model AuditLog {
   action    AuditAction
   entity    String
   entityId  String
-  /// Snapshots used by the history screen to show diffs and undo changes.
   before    Json?
   after     Json?
   createdAt DateTime    @default(now())
@@ -358,8 +348,6 @@ model AuditLog {
   @@index([createdAt])
 }
 
-/// Short links (/r/<slug>) that land on the site with UTM parameters. The CV routes
-/// its links through one of them, so each sent CV shows up as its own source.
 model ShortLink {
   id          String   @id @default(uuid(7))
   slug        String   @unique

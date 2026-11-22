@@ -1,7 +1,3 @@
-/**
- * The page's sections, in order. Each one maps to the API endpoint that feeds it,
- * which the sidebar labels and the dev panel calls.
- */
 export const sections = [
   { id: 'about', method: 'GET', endpoint: '/api/v1/profile' },
   { id: 'experience', method: 'GET', endpoint: '/api/v1/experience' },
@@ -15,5 +11,4 @@ export type Section = (typeof sections)[number];
 export type SectionId = Section['id'];
 export type HttpMethod = Section['method'];
 
-/** Endpoint without the `/api/v1` prefix, as shown in compact labels. */
 export const shortPath = (endpoint: string) => endpoint.replace('/api/v1', '');

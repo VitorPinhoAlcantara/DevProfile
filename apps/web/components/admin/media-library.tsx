@@ -38,7 +38,6 @@ export function useMediaLibrary() {
   return { items, error, reload, setError };
 }
 
-/** "Send image" button that uploads and reports the stored item. */
 export function UploadButton({
   onUploaded,
   label = 'Enviar imagem',
@@ -83,7 +82,6 @@ export function UploadButton({
   );
 }
 
-/** Grid of uploaded images; clicking one picks it. */
 export function MediaGrid({
   items,
   selectedRef,
@@ -123,7 +121,6 @@ export function MediaGrid({
   );
 }
 
-/** Modal to choose an image from the library, or upload a new one. */
 export function MediaPickerDialog({
   open,
   onClose,
@@ -188,7 +185,6 @@ export function MediaPickerDialog({
   );
 }
 
-/** A single image slot (cover, profile photo) holding a `media:<key>` reference. */
 export function ImageField({
   label,
   value,
@@ -200,7 +196,6 @@ export function ImageField({
   value: string | null;
   onChange: (value: string | null) => void;
   hint?: string;
-  /** Shows the image as the site does for profile photos: a centered circle. */
   round?: boolean;
 }) {
   const [open, setOpen] = useState(false);

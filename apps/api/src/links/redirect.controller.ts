@@ -12,7 +12,6 @@ import { LinksService, landingUrl, siteUrl } from './links.service.js';
 const segment = z.string().max(80);
 const redirectParams = z.object({ slug: segment, key: segment.optional() });
 
-/** Public short links, served at `/r/*` by Caddy (rewritten to `/api/r/*`). */
 @Controller('r')
 export class RedirectController {
   constructor(

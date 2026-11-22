@@ -31,7 +31,6 @@ export class CvService {
     private readonly links: LinksService,
   ) {}
 
-  /** `link` is a short-link slug: the CV's links go through it (default: `curriculo`). */
   async pdf(locale: Locale, link?: string) {
     return (await this.generate(locale, link)).pdf;
   }
@@ -57,7 +56,6 @@ export class CvService {
     return generated.report;
   }
 
-  /** "Vitor-Pinho-Alcantara-CV-PT.pdf" / "Vitor-Pinho-Alcantara-Resume-EN.docx" */
   async fileName(locale: Locale, extension: 'pdf' | 'docx') {
     const { data } = await this.generate(locale);
     const name = data.name

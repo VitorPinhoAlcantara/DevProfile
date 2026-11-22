@@ -2,7 +2,6 @@ import { getTranslations } from 'next-intl/server';
 import type { Locale, ResponseMeta } from '@devprofile/shared';
 import { formatDay } from '@/lib/format';
 
-/** VS Code-style footer with availability, last update and links to the API docs. */
 export async function StatusBar({
   meta,
   location,

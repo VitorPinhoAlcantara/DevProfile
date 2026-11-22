@@ -1,4 +1,3 @@
-/** Soft skills as a quiet labeled line, so they don't compete with the tech chips. */
 export function SoftSkills({
   label,
   items,

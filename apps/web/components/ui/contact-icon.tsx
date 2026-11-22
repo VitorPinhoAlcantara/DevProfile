@@ -25,5 +25,4 @@ export function ContactIcon({
   }
 }
 
-/** External links open in a new tab; mailto/tel stay in place. */
 export const isExternal = (href: string) => /^https?:\/\//.test(href);

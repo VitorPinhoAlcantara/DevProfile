@@ -50,13 +50,11 @@ export class AdminGuard implements CanActivate {
   }
 }
 
-/** The logged-in admin, set by AdminGuard. */
 export const CurrentAdmin = createParamDecorator(
   (_: unknown, context: ExecutionContext) =>
     context.switchToHttp().getRequest<AdminRequest>().admin!,
 );
 
-/** The raw session token of the current request, set by AdminGuard. */
 export const SessionToken = createParamDecorator(
   (_: unknown, context: ExecutionContext) =>
     context.switchToHttp().getRequest<AdminRequest>().sessionToken!,

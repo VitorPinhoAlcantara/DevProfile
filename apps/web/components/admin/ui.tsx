@@ -10,8 +10,6 @@ import { useId } from 'react';
 import { type Method, MethodPill } from '@/components/ui/method-pill';
 import { cn } from '@/lib/cn';
 
-// Small building blocks for the admin forms, styled with the site's tokens.
-
 const controlClass =
   'w-full rounded-md border border-line bg-bg px-3 py-2 text-sm text-fg outline-none transition placeholder:text-soft focus:border-accent disabled:opacity-60 pointer-coarse:min-h-11 pointer-coarse:text-base';
 
@@ -152,7 +150,6 @@ export function Card({
   );
 }
 
-/** Page title with the endpoint it talks to, in the same spirit as the site. */
 export function PageHeader({
   title,
   method,

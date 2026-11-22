@@ -176,7 +176,6 @@ function CvView() {
   );
 }
 
-/** The PDF takes a few seconds to build; say so instead of showing a blank box. */
 function PdfPreview({ src }: { src: string }) {
   const [loaded, setLoaded] = useState(false);
   // Some browsers never fire `load` for a PDF in an iframe; don't cover it forever.

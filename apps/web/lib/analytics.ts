@@ -1,6 +1,3 @@
-// Umami visitor stats. Links are tracked declaratively with `data-umami-event*`
-// attributes; `track` covers what isn't a click, like a form that was sent.
-
 declare global {
   interface Window {
     umami?: { track: (event: string, data?: Record<string, string>) => void };
@@ -17,7 +14,6 @@ export function track(event: string, data?: Record<string, string>) {
   window.umami?.track(event, data);
 }
 
-/** Props that make a link report a click as `event`, with `data` as properties. */
 export function trackClick(event: string, data: Record<string, string> = {}) {
   return {
     'data-umami-event': event,

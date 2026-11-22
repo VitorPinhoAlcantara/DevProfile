@@ -34,7 +34,6 @@ export class ZodValidationPipe<T extends z.ZodType> implements PipeTransform {
   }
 }
 
-/** Where the OpenAPI generator finds the schemas attached by the decorators below. */
 export const REQUEST_SCHEMAS = Symbol('request-schemas');
 
 export type RequestSchemas = {

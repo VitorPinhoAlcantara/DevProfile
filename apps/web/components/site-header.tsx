@@ -20,7 +20,6 @@ export function SiteHeader({
 }: {
   name: string;
   version: string;
-  /** Pages without the API panel hide the toggle, which would do nothing there. */
   withDevMode?: boolean;
 }) {
   const t = useTranslations('header');

@@ -171,7 +171,6 @@ describe('admin API (e2e)', () => {
         changed: ['profile'],
       });
 
-      // Undo brings the old headline back.
       await authed
         .post(`/api/admin/history/${history[0]!.id}/restore`)
         .expect(201);

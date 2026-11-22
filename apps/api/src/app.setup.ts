@@ -10,7 +10,6 @@ import { ResponseContractInterceptor } from './common/response-contract.intercep
 /** Caddy forwards /api/* untouched, so every route lives under this prefix. */
 export const API_PREFIX = 'api';
 
-// Shared by main.ts and the e2e tests so both expose the same app.
 export function configureApp(app: NestExpressApplication) {
   // Validation messages in Portuguese, matching the rest of the API's errors.
   z.config(z.locales.pt());

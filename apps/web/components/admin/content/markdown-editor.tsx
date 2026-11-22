@@ -13,10 +13,6 @@ import { cn } from '@/lib/cn';
 
 type Lang = 'pt' | 'en';
 
-/**
- * README-style page editor: Markdown per language, live preview, and an
- * "insert image" button that drops `![alt](url)` at the cursor.
- */
 export function MarkdownEditor({
   value,
   onChange,

@@ -14,7 +14,6 @@ export type SessionOrigin = { ip: string | null; userAgent: string | null };
 export class SessionsService {
   constructor(private readonly prisma: PrismaService) {}
 
-  /** Creates a session and returns the raw token for the cookie. */
   async create(userId: string, origin: SessionOrigin) {
     const token = newSessionToken();
     await this.prisma.session.create({
@@ -54,7 +53,6 @@ export class SessionsService {
     });
   }
 
-  /** Ends every other session, e.g. after a password change. */
   async revokeOthers(userId: string, keepToken: string) {
     await this.prisma.session.deleteMany({
       where: { userId, NOT: { tokenHash: hashToken(keepToken) } },

@@ -43,7 +43,6 @@ const sectionViews: Record<
   settings: SettingsSection,
 };
 
-/** Drops blank bullet lines left while typing in the "one per line" boxes. */
 function normalize(content: PortfolioContent): PortfolioContent {
   const clean = (lines: string[]) => lines.map((l) => l.trim()).filter(Boolean);
   return {
@@ -59,7 +58,6 @@ function normalize(content: PortfolioContent): PortfolioContent {
   };
 }
 
-/** `experiences.0.role.pt` → `Experiências › item 1 › role.pt` */
 function readablePath(path: (string | number)[]) {
   const [section, index, ...rest] = path;
   const label = sectionLabels[section as PortfolioSection] ?? String(section);
@@ -112,7 +110,6 @@ export function ContentEditor() {
     [draft, saved],
   );
 
-  // Warn before leaving the page with unsaved edits.
   useEffect(() => {
     if (!dirty) return;
     const warn = (event: BeforeUnloadEvent) => event.preventDefault();

@@ -5,7 +5,6 @@ import { responsiveImage } from '@/lib/media';
 // Raw HTML in the Markdown is not rendered (react-markdown's default), so content
 // edited in the admin can't inject markup into the page.
 
-/** README-style project page: headings, lists, tables, quotes and screenshots. */
 export function Markdown({ children }: { children: string }) {
   return (
     <div className="prose prose-portfolio max-w-none">
@@ -39,7 +38,6 @@ export function Markdown({ children }: { children: string }) {
               {alt && <span className="md-caption">{alt}</span>}
             </span>
           ),
-          // Wide tables scroll inside the column instead of the whole page.
           table: ({ children: rows }) => (
             <div className="overflow-x-auto">
               <table>{rows}</table>

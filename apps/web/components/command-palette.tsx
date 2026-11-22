@@ -17,7 +17,6 @@ import { useWorkspace } from '@/components/workspace-provider';
 import { usePathname, useRouter } from '@/i18n/navigation';
 import { sections } from '@/lib/sections';
 
-/** Ctrl/Cmd + K: jump to a section or project, or run a quick action. */
 export function CommandPalette({
   projects,
 }: {

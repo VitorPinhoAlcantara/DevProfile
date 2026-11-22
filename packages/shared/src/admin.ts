@@ -1,9 +1,6 @@
 import { z } from 'zod';
 import { portfolioSchema } from './content.js';
 
-// Contracts for /api/admin/*. Every mutating request must also send the
-// `X-DevProfile-Admin: 1` header (CSRF guard, see ADMIN_HEADER).
-
 export const ADMIN_HEADER = 'x-devprofile-admin';
 
 export const totpCodeSchema = z
@@ -65,7 +62,6 @@ export const totpDisableInputSchema = z
   .object({ code: totpCodeSchema, password: passwordInput('Informe a senha.') })
   .meta({ id: 'TotpDisableInput' });
 
-/** The whole portfolio plus the version it was read at (optimistic locking). */
 export const adminContentSchema = z
   .object({
     content: portfolioSchema,
@@ -92,7 +88,6 @@ export const mediaItemSchema = z
     id: z.string(),
     key: z.string(),
     url: z.string(),
-    /** What goes into `cover`/`photo` fields: `media:<key>`. */
     ref: z.string(),
     originalName: z.string(),
     mimeType: z.string(),
@@ -139,9 +134,7 @@ export const historyEntrySchema = z
     action: z.enum(['UPDATE', 'RESTORE']),
     createdAt: z.iso.datetime(),
     actor: z.string().nullable(),
-    /** Top-level parts of the portfolio that changed in this save. */
     changed: z.array(z.enum(portfolioSections)),
-    /** Item-level summary, e.g. `StreetUrban editado`. */
     details: z.array(z.string()),
   })
   .meta({ id: 'HistoryEntry' });
@@ -185,7 +178,6 @@ export const cvReportSchema = z
   .meta({ id: 'CvReport' });
 export type CvReport = z.infer<typeof cvReportSchema>;
 
-/** Values that go into UTM parameters and link slugs: lowercase, no spaces. */
 const utmValue = z
   .string()
   .trim()
@@ -227,7 +219,6 @@ export type ShortLinkInput = z.infer<typeof shortLinkInputSchema>;
 export const shortLinkSchema = shortLinkInputSchema
   .extend({
     id: z.string(),
-    /** The short address to share, e.g. `https://alcantara.dev.br/r/empresa-x`. */
     url: z.string(),
     clicks: z.number(),
     createdAt: z.iso.datetime(),

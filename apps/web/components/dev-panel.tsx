@@ -21,7 +21,6 @@ const contactExample = {
   message: 'Olá, Vitor! Gostaria de conversar sobre uma vaga.',
 };
 
-// Responses are cached per URL for the visit, so scrolling back and forth stays instant.
 const cache = new Map<string, Extract<CallResult, { state: 'done' }>>();
 
 function useApiCall(section: Section, locale: string) {
@@ -74,7 +73,6 @@ function curlFor(section: Section, url: string) {
 const formatBytes = (bytes: number) =>
   bytes < 1024 ? `${bytes} B` : `${(bytes / 1024).toFixed(1)} KB`;
 
-/** The request/response viewer, shared by the desktop sidebar and the mobile drawer. */
 function DevPanelBody({ onClose }: { onClose?: () => void }) {
   const t = useTranslations('dev');
   const locale = useLocale();
@@ -195,7 +193,6 @@ function DevPanelBody({ onClose }: { onClose?: () => void }) {
   );
 }
 
-/** Right-hand column on wide screens, toggled by "Modo dev" in the header. */
 export function DevSidebar() {
   const { devOpen } = useWorkspace();
   if (!devOpen) return null;
@@ -209,14 +206,12 @@ export function DevSidebar() {
   );
 }
 
-/** Floating "JSON" button and bottom sheet for screens without the sidebar. */
 export function DevDrawer() {
   const t = useTranslations('dev');
   const [open, setOpen] = useState(false);
 
   return (
     <Drawer.Root open={open} onOpenChange={setOpen}>
-      {/* Icon-only on phones so it covers less of the text underneath. */}
       <Drawer.Trigger
         aria-label={t('open')}
         className="fixed right-4 bottom-4 z-30 flex size-11 items-center justify-center gap-1.5 rounded-full border border-line-strong bg-panel font-mono text-xs text-fg shadow-lg sm:size-auto sm:px-3.5 sm:py-2 xl:hidden pointer-coarse:min-h-11"

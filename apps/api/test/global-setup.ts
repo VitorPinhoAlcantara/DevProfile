@@ -13,7 +13,6 @@ declare module 'vitest' {
 
 let container: StartedPostgreSqlContainer | undefined;
 
-// One throwaway Postgres for the whole e2e run, migrated with the real migrations.
 export async function setup(project: TestProject) {
   container = await new PostgreSqlContainer('postgres:18-alpine').start();
   const databaseUrl = container.getConnectionUri();

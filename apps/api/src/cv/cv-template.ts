@@ -60,7 +60,6 @@ export const CV_TEMPLATE = String.raw`
   v(0.2em)
 }
 
-// Title on the left, date on the right, on the same line.
 #let headline(title, date) = grid(
   columns: (1fr, auto),
   column-gutter: 1em,
@@ -74,14 +73,12 @@ export const CV_TEMPLATE = String.raw`
 
 #let company(name) = text(weight: "semibold", fill: accent, name)
 
-// ---------------------------------------------------------------- header
 #align(center)[
   #text(size: 22pt, weight: "bold", fill: accent, data.name)
   #v(-0.2em)
   #text(size: spacing.size - 1pt, fill: muted, data.contacts.map(c => box(maybe-link(c))).join([ #h(0.15em)·#h(0.15em) ]))
 ]
 
-// ---------------------------------------------------------------- sections
 #let render(key) = {
   let title = data.headings.at(key)
   if key == "intro" and data.intro != "" {

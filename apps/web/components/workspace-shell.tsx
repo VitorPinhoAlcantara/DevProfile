@@ -7,10 +7,6 @@ import { StatusBar } from '@/components/status-bar';
 import { WorkspaceGrid } from '@/components/workspace-grid';
 import { WorkspaceProvider } from '@/components/workspace-provider';
 
-/**
- * The API-client look: section list on the left, readable content in the middle,
- * live API responses on the right (or in a bottom sheet on small screens).
- */
 export function WorkspaceShell({
   portfolio,
   meta,
@@ -19,7 +15,6 @@ export function WorkspaceShell({
 }: {
   portfolio: PublicPortfolio;
   meta: ResponseMeta;
-  /** Project pages have no sections, so they skip the nav and the dev panel. */
   withSections?: boolean;
   children: ReactNode;
 }) {

@@ -10,7 +10,6 @@ import { cn } from '@/lib/cn';
 import { sections } from '@/lib/sections';
 import { DEFAULT_PHOTO } from '@/lib/site';
 
-/** Hero: who, what, where, availability and how to reach out — readable in seconds. */
 export async function AboutSection({
   portfolio,
 }: {
@@ -88,7 +87,6 @@ export async function AboutSection({
           <Download className="size-4" aria-hidden />
           {t('downloadCv')}
         </a>
-        {/* E-mail keeps its label; profile links become icon buttons to cut the choices to two. */}
         {heroContacts.map((contact) => (
           <ContactButton
             key={contact.href}

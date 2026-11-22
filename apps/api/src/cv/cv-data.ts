@@ -23,7 +23,6 @@ export type CvData = {
   title: string;
   name: string;
   contacts: CvLink[];
-  /** Order of the sections for the chosen profile (júnior or estágio). */
   order: CvSectionKey[];
   headings: Record<CvSectionKey, string>;
   intro: string;
@@ -91,7 +90,6 @@ const MONTHS_EN = [
   'Dec',
 ];
 
-/** `2025-09` → `09/2025` (pt) or `Sep 2025` (en). Year-only stays as is. */
 export function cvDate(value: string, lang: 'pt' | 'en') {
   const [year, month] = value.split('-');
   if (!month) return year!;
@@ -151,7 +149,6 @@ const printable = (href: string) =>
     .replace(/^www\./, '')
     .replace(/\/$/, '');
 
-/** Rewrites a CV link; `key` names it (`github`, `p-streeturban`) for click stats. */
 export type CvLinker = (key: string, href: string) => string;
 
 const toKey = (text: string) =>
@@ -162,7 +159,6 @@ const toKey = (text: string) =>
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-|-$/g, '');
 
-/** Builds the CV from the canonical content, keeping only what is marked for the CV. */
 export function buildCvData(
   content: PortfolioContent,
   locale: Locale,
@@ -312,7 +308,6 @@ export function buildCvData(
   };
 }
 
-/** Every external link the CV prints, by key: what `/r/<slug>/<key>` redirects to. */
 export function cvLinkTargets(content: PortfolioContent): Map<string, string> {
   const targets = new Map<string, string>();
   buildCvData(content, 'pt-BR', (key, href) => {

@@ -74,7 +74,6 @@ export const portfolioSeed: PortfolioInput = {
     },
   ],
 
-  // Grouped the way the CV prints them ("Linguagens: …", "Back-end: …").
   skillCategories: [
     {
       key: 'linguagens',

@@ -73,7 +73,6 @@ describe('POST /api/v1/contact (e2e)', () => {
     const blocked = await post(validMessage, '203.0.113.4').expect(429);
 
     expect(apiErrorSchema.parse(blocked.body).error.code).toBe('RATE_LIMITED');
-    // Another visitor is not affected.
     await post(validMessage, '203.0.113.5').expect(202);
   });
 });

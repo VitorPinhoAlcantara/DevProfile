@@ -19,11 +19,9 @@ function joinPath(...parts: (string | string[] | undefined)[]) {
     .flatMap((part) => (Array.isArray(part) ? part[0] : part))
     .filter((part): part is string => !!part && part !== '/')
     .map((part) => part.replace(/^\/|\/$/g, ''));
-  // Express `:slug` becomes OpenAPI `{slug}`.
   return `/${segments.join('/')}`.replace(/:(\w+)/g, '{$1}');
 }
 
-/** Builds the OpenAPI document from every route decorated with `@ApiRoute`. */
 @Injectable()
 export class OpenApiService {
   private document: Record<string, unknown> | undefined;
@@ -127,7 +125,6 @@ export class OpenApiService {
           'API pública do portfólio. Todos os endpoints de conteúdo aceitam `?lang=pt-BR` (padrão) ou `?lang=en`.',
       },
       servers: [{ url: '/' }],
-      // Same order as the site's sections.
       tags: [
         'Portfólio',
         'Sobre',

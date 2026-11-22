@@ -49,7 +49,6 @@ const emptyForm = {
 };
 type Form = typeof emptyForm;
 
-// UTM values are lowercase without spaces: "Empresa X" is sent as "empresa-x".
 const toInput = (form: Form): ShortLinkInput => ({
   slug: toSlug(form.slug),
   source: toSlug(form.source),

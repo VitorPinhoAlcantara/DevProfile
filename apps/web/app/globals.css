@@ -3,7 +3,6 @@
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* Light theme */
 :root {
   --bg: #f6f8fb;
   --panel: #ffffff;
@@ -30,7 +29,6 @@
   --json-literal: #7e22ce;
 }
 
-/* Dark theme (default) */
 .dark {
   --bg: #090d15;
   --panel: #0e1420;
@@ -105,7 +103,6 @@ li {
   text-wrap: pretty;
 }
 
-/* Long paragraphs keep a readable measure; images, tables and code stay full width. */
 .prose-portfolio :is(p, ul, ol, blockquote) {
   max-width: 56ch;
 }
@@ -126,7 +123,6 @@ li {
   }
 }
 
-/* Markdown project pages: typography plugin wired to the site's color tokens. */
 .prose-portfolio {
   --tw-prose-body: var(--muted);
   --tw-prose-headings: var(--text);

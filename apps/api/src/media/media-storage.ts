@@ -6,10 +6,8 @@ import { imageSize } from 'image-size';
 import sharp from 'sharp';
 import type { Media, PrismaClient } from '../generated/prisma/client.js';
 
-/** Public path images are served from (see MediaController). */
 export const mediaUrl = (storageKey: string) => `/api/media/${storageKey}`;
 
-/** Where files live: a Docker volume in production, `apps/api/uploads` locally. */
 export const mediaDir = () => resolve(process.env.MEDIA_DIR ?? 'uploads');
 
 const MIME_BY_TYPE: Record<string, { ext: string; mime: string }> = {
@@ -25,7 +23,6 @@ export class UnsupportedMediaError extends Error {}
 export const variantDir = join(tmpdir(), 'devprofile-media-variants');
 const pendingVariants = new Map<string, Promise<string>>();
 
-/** Name of a resized WebP copy in `variantDir`, built on the first request for it. */
 export function mediaVariant(storageKey: string, width: number) {
   const name = `${storageKey}-${width}.webp`;
   let job = pendingVariants.get(name);
@@ -86,7 +83,6 @@ export class MediaStorage {
     try {
       await writeFile(join(this.dir, storageKey), data, { flag: 'wx' });
     } catch (error) {
-      // Same content already on disk (e.g. the row was deleted): reuse the file.
       if ((error as NodeJS.ErrnoException).code !== 'EEXIST') throw error;
     }
 

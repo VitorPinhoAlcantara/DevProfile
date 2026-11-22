@@ -3,7 +3,6 @@ import type { PrismaClient } from '../generated/prisma/client.js';
 
 type Db = Pick<PrismaClient, '$transaction'>;
 
-/** Turns a `media:<file>` reference into a stored image. */
 export type MediaResolver = (
   file: string,
 ) => Promise<{ id: string; url: string }>;

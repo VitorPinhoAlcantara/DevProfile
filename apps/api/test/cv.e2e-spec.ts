@@ -62,7 +62,6 @@ describe('CV (e2e)', () => {
     expect(res.headers['content-disposition']).toContain(
       'Vitor-Pinho-Alcantara-Resume-EN.docx',
     );
-    // A .docx is a zip archive.
     expect((res.body as Buffer).subarray(0, 2).toString()).toBe('PK');
   });
 

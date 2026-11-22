@@ -104,7 +104,6 @@ export function useAdmin() {
   return context;
 }
 
-/** Checks the session (redirecting to login) and draws the admin chrome. */
 export function AdminShell({ children }: { children: ReactNode }) {
   const router = useRouter();
   const pathname = usePathname();

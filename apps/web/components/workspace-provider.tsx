@@ -31,7 +31,6 @@ function readStoredDev(): boolean | null {
   }
 }
 
-/** Shared UI state: which section is on screen, and whether the dev panel is open. */
 export function WorkspaceProvider({ children }: { children: ReactNode }) {
   const [activeSection, setActiveSection] = useState<SectionId>('about');
   const [devOpen, setDevOpen] = useState(true);

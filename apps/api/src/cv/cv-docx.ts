@@ -64,7 +64,6 @@ const heading = (title: string) =>
     ],
   });
 
-/** Title on the left, date pushed to the right margin with a tab stop. */
 const headline = (
   children: (TextRun | ExternalHyperlink)[],
   date: string | null,

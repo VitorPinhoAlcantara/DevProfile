@@ -4,10 +4,6 @@ import { ChipList } from '@/components/ui/chip';
 import { Section } from '@/components/ui/section';
 import { sections } from '@/lib/sections';
 
-/**
- * One row per category (label, then its skills), like the "Linguagens: …" lines
- * on a CV. Rows stay easy to scan no matter how many skills a category gets.
- */
 export async function SkillsSection({
   categories,
 }: {

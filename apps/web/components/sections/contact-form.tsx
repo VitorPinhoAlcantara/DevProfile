@@ -10,7 +10,6 @@ import { cn } from '@/lib/cn';
 type Field = 'name' | 'email' | 'message';
 type Status = 'idle' | 'sending' | 'sent' | 'error' | 'rateLimited';
 
-/** Validates with the same schema as the API, then posts to /api/v1/contact. */
 export function ContactForm() {
   const t = useTranslations('contact');
   const [status, setStatus] = useState<Status>('idle');
@@ -129,7 +128,6 @@ export function ContactForm() {
         )}
       </div>
 
-      {/* Honeypot: invisible to people, tempting to bots. */}
       <div aria-hidden className="absolute -left-[9999px]">
         <label>
           Website

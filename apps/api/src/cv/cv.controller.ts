@@ -20,7 +20,6 @@ const cvQuerySchema = z
       .enum(['pdf', 'docx'])
       .default('pdf')
       .meta({ description: 'PDF ou Word (.docx)' }),
-    /** `inline=true` opens in the browser (admin preview) instead of downloading. */
     inline: z
       .enum(['true', 'false'])
       .default('false')

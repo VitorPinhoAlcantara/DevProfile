@@ -4,7 +4,6 @@ import type { ShortLink } from '../generated/prisma/client.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import type { CvLinker } from '../cv/cv-data.js';
 
-/** The link the public CV download uses when no other is asked for. */
 export const DEFAULT_CV_LINK = 'curriculo';
 
 export const siteUrl = () =>
@@ -23,7 +22,6 @@ export const toShortLinkDto = (link: ShortLink): ShortLinkDto => ({
   createdAt: link.createdAt.toISOString(),
 });
 
-/** Landing address with the link's UTM parameters; `lang` picks the English site. */
 export function landingUrl(link: ShortLink, lang?: 'pt' | 'en') {
   let path = link.destination;
   if (lang === 'en' && !/^\/en(\/|$|\?)/.test(path))
@@ -48,7 +46,6 @@ export class LinksService {
     });
   }
 
-  /** Same-site links go to the landing page; the rest through `/r/<slug>/<key>`. */
   async cvLinker(slug: string | undefined, locale: Locale) {
     const link =
       (slug ? await this.find(slug) : null) ??

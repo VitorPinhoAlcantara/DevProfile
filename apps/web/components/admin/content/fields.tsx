@@ -26,7 +26,6 @@ function LangTag({ label }: { label: string }) {
   );
 }
 
-/** Portuguese and English side by side, so both versions are edited together. */
 export function LocalizedField({
   label,
   value,
@@ -75,7 +74,6 @@ export function LocalizedField({
   );
 }
 
-/** One bullet per line, in both languages. */
 export function LocalizedLines({
   label,
   value,
@@ -136,7 +134,6 @@ export function TextField({
   );
 }
 
-/** Optional text: an empty box means `null`. */
 export function OptionalTextField({
   value,
   onChange,
@@ -187,7 +184,6 @@ export function SelectField<T extends string>({
   );
 }
 
-/** Where an item shows up. */
 export function VisibilityFields({
   value,
   onChange,
@@ -211,7 +207,6 @@ export function VisibilityFields({
   );
 }
 
-/** Toggle chips to pick skills from the catalog. */
 export function SkillPicker({
   catalog,
   value,
@@ -267,10 +262,6 @@ export function SkillPicker({
   );
 }
 
-/**
- * A reorderable list of collapsible items (experiences, projects…). Order here is
- * the order on the site and on the CV.
- */
 export function ListEditor<T>({
   items,
   itemTitle,

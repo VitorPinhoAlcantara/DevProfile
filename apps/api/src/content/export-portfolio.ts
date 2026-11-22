@@ -19,10 +19,6 @@ const mediaRef = (media: { storageKey: string } | null) =>
   media ? `media:${media.storageKey}` : null;
 const both = (pt: string, en: string) => ({ pt, en });
 
-/**
- * Reads the whole portfolio back into the canonical document shape — the
- * inverse of `importPortfolio`. Images come back as `media:<storageKey>`.
- */
 export async function exportPortfolio(db: Db): Promise<PortfolioContent> {
   const [
     profile,

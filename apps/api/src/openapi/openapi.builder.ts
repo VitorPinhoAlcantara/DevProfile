@@ -1,8 +1,5 @@
 import { z } from 'zod';
 
-// Converts Zod schemas into an OpenAPI 3.1 document. Schemas named with
-// `.meta({ id })` become reusable entries under `components.schemas`.
-
 type JsonSchema = Record<string, unknown>;
 
 const COMPONENT_REF = '#/components/schemas/';
@@ -25,7 +22,6 @@ function rewriteRefs(node: unknown): unknown {
 export class OpenApiSchemaCollector {
   readonly components: Record<string, JsonSchema> = {};
 
-  /** Returns an inline schema or a `$ref`, registering named schemas as components. */
   toSchema(schema: z.ZodType, io: 'input' | 'output'): JsonSchema {
     const json = z.toJSONSchema(schema, {
       target: 'draft-2020-12',
@@ -48,7 +44,6 @@ export class OpenApiSchemaCollector {
     return { $ref: `${COMPONENT_REF}${id}` };
   }
 
-  /** Expands an object schema into OpenAPI `parameters`. */
   toParameters(schema: z.ZodObject, location: 'query' | 'path'): JsonSchema[] {
     const json = z.toJSONSchema(schema, {
       target: 'draft-2020-12',

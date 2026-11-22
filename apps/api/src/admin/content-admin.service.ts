@@ -19,7 +19,6 @@ import { RevalidationService } from './revalidation.service.js';
 
 const AUDIT_ENTITY = 'portfolio';
 
-/** Sections whose JSON differs between two snapshots. */
 export function changedSections(
   before: PortfolioContent | null,
   after: PortfolioContent | null,
@@ -41,7 +40,6 @@ const itemLabel = (item: Item): string => {
 const itemKey = (item: Item) =>
   typeof item.slug === 'string' ? item.slug : itemLabel(item);
 
-/** One line per changed item, e.g. `StreetUrban editado`, for the history list. */
 export function changeDetails(
   before: PortfolioContent | null,
   after: PortfolioContent | null,
@@ -75,11 +73,6 @@ export function changeDetails(
   return details;
 }
 
-/**
- * The admin edits the portfolio as one document. Each save replaces the content,
- * keeps before/after snapshots in the audit log (for history and undo) and
- * refreshes the public site.
- */
 @Injectable()
 export class ContentAdminService {
   constructor(
@@ -154,7 +147,6 @@ export class ContentAdminService {
     }));
   }
 
-  /** Undoes one save by restoring the content as it was right before it. */
   async restore(entryId: string, actor: User) {
     const entry = await this.prisma.auditLog.findFirst({
       where: { id: entryId, entity: AUDIT_ENTITY },
@@ -184,7 +176,6 @@ export class ContentAdminService {
     return (settings?.contentUpdatedAt ?? new Date(0)).toISOString();
   }
 
-  /** In the admin, images are referenced as `media:<storageKey>` of an upload. */
   private resolveExistingMedia: MediaResolver = async (key) => {
     const media = await this.prisma.media.findUnique({
       where: { storageKey: key },

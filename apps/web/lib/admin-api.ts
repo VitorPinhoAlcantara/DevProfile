@@ -1,7 +1,6 @@
 import { ADMIN_HEADER, apiErrorSchema } from '@devprofile/shared';
 import type { z } from 'zod';
 
-/** An error answered by the API, with its machine-readable code. */
 export class AdminApiError extends Error {
   constructor(
     readonly status: number,
@@ -18,10 +17,6 @@ type Options = {
   body?: unknown;
 };
 
-/**
- * Browser-side calls to /api/admin/*. The session cookie travels on its own;
- * writes add the header the API's CSRF guard asks for.
- */
 export async function adminFetch<T extends z.ZodType | undefined = undefined>(
   path: string,
   schema?: T,

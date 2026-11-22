@@ -23,7 +23,6 @@ export default async function HomePage({
   const { data: portfolio, meta } = await getPortfolio(locale);
   const { profile, contacts } = portfolio;
 
-  // schema.org Person, so search engines can show name, role and profiles.
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Person',

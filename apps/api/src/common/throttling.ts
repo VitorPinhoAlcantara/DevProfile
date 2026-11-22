@@ -8,7 +8,6 @@ import { clientIp } from './client-ip.js';
 export const CONTACT_LIMIT = { name: 'contact', ttl: 10 * 60_000, limit: 5 };
 export const LOGIN_LIMIT = { name: 'login', ttl: 15 * 60_000, limit: 10 };
 
-/** Rate limits by the visitor's real IP (Cloudflare-aware). */
 @Injectable()
 export class ClientIpThrottlerGuard extends ThrottlerGuard {
   protected override getTracker(req: Record<string, any>): Promise<string> {

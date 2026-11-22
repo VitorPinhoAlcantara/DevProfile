@@ -39,9 +39,7 @@ services:
       REVALIDATE_TOKEN: ${REVALIDATE_TOKEN:?set REVALIDATE_TOKEN in .env}
       WEB_INTERNAL_URL: http://web:3000
       COOKIE_SECURE: ${COOKIE_SECURE:-true}
-      # Short links and CV links are built on this address.
       SITE_URL: ${SITE_URL:-http://localhost:7635}
-      # Short links report clicks on external CV links to Umami (empty disables it).
       UMAMI_UPSTREAM: ${UMAMI_UPSTREAM:-host.docker.internal:20000}
       UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
     extra_hosts:
@@ -62,7 +60,6 @@ services:
     environment:
       DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB}
     volumes:
-      # The seed stores the project screenshots here.
       - uploads:/data/uploads
     depends_on:
       postgres:
@@ -77,9 +74,7 @@ services:
     environment:
       API_INTERNAL_URL: http://api:3001
       REVALIDATE_TOKEN: ${REVALIDATE_TOKEN:?set REVALIDATE_TOKEN in .env}
-      # Public address, used for canonical links, sitemap and Open Graph.
       SITE_URL: ${SITE_URL:-http://localhost:7635}
-      # Empty disables the visitor stats script.
       UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
     depends_on:
       api:
@@ -105,7 +100,6 @@ services:
 volumes:
   caddy_data:
   postgres_data:
-  # Images uploaded through the admin (and the seed screenshots). Back this up with the database.
   uploads:
 
 x-casaos:

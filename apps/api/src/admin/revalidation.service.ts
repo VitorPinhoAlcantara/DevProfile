@@ -3,7 +3,6 @@ import { Injectable, Logger } from '@nestjs/common';
 export const REVALIDATE_HEADER = 'x-revalidate-token';
 export const DEV_REVALIDATE_TOKEN = 'dev-revalidate-token';
 
-/** Asks the site to drop its cached content right after a save. */
 @Injectable()
 export class RevalidationService {
   private readonly logger = new Logger(RevalidationService.name);

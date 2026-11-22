@@ -16,6 +16,5 @@ export type ApiRouteOptions = {
   responses: Record<number, ApiRouteResponse>;
 };
 
-/** Documents a route in the OpenAPI document. Request schemas come from `@Valid*`. */
 export const ApiRoute = (options: ApiRouteOptions) =>
   SetMetadata(API_ROUTE, options);

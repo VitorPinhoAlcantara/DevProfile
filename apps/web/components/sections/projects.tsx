@@ -39,7 +39,6 @@ export async function ProjectsSection({
                 />
               )}
               <h3 className="font-semibold text-fg">
-                {/* The stretched link makes the whole card clickable. */}
                 <Link
                   href={`/projects/${project.slug}`}
                   className="after:absolute after:inset-0 after:rounded-lg"

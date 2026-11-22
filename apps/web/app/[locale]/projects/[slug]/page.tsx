@@ -70,7 +70,6 @@ export default async function ProjectPage({ params }: Props) {
     loadProject(slug, locale),
     getPortfolio(locale),
   ]);
-  // Same order as the home page: featured first.
   const ordered = [
     ...portfolio.projects.filter((p) => p.featured),
     ...portfolio.projects.filter((p) => !p.featured),
@@ -90,7 +89,6 @@ export default async function ProjectPage({ params }: Props) {
         {t('back')}
       </Link>
 
-      {/* GitHub-style: README on the left, "about" box on the right. */}
       <article className="mt-6 lg:grid lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-10">
         <div className="min-w-0">
           <p className="flex items-center gap-1.5 text-soft">

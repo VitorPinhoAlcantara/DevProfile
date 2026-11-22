@@ -8,9 +8,6 @@ import {
   yearMonthSchema,
 } from './primitives.js';
 
-// Canonical portfolio content, with every translatable field in both languages.
-// The admin edits this shape and the seed is validated against it.
-
 export const availabilityStatuses = ['OPEN_TO_WORK', 'NOT_LOOKING'] as const;
 export const workModes = ['REMOTE', 'HYBRID', 'ONSITE'] as const;
 export const contactKinds = [
@@ -45,14 +42,12 @@ export const languageLevels = [
 ] as const;
 export const cvProfiles = ['JUNIOR', 'INTERNSHIP'] as const;
 export const cvFonts = ['SANS', 'SERIF'] as const;
-/** Technical skills are shown as "technologies"; soft skills are listed apart. */
 export const skillKinds = ['TECHNICAL', 'SOFT'] as const;
 
 export const profileSchema = z.object({
   fullName: z.string().trim().min(1),
   headline: localizedTextSchema,
   location: localizedTextSchema,
-  /** Long text for the site. */
   summary: localizedTextSchema,
   /** At most ~50 words, used by the `JUNIOR` CV profile. */
   cvSummary: localizedTextSchema,
@@ -69,7 +64,6 @@ export type ProfileContent = z.infer<typeof profileSchema>;
 export const contactChannelSchema = visibilitySchema.extend({
   kind: z.enum(contactKinds),
   label: z.string().trim().min(1),
-  /** What gets printed, e.g. `linkedin.com/in/user`. */
   value: z.string().trim().min(1),
   href: z.string().trim().min(1),
 });
@@ -81,7 +75,6 @@ export const skillCategorySchema = z.object({
   kind: z.enum(skillKinds).default('TECHNICAL'),
   skills: z.array(
     visibilitySchema.extend({
-      /** Canonical name, also used to link skills to experiences and projects. */
       name: z.string().trim().min(1),
       /** Only for names that change in English (soft skills); tech names stay as-is. */
       nameEn: z.string().trim().min(1).nullable().default(null),
@@ -111,7 +104,6 @@ export const experienceSchema = visibilitySchema.extend({
   period: periodSchema,
   summary: localizedTextSchema,
   cvBullets: localizedListSchema,
-  /** Names that must exist in the skills catalog. */
   skills: z.array(z.string()),
 });
 export type ExperienceContent = z.infer<typeof experienceSchema>;
@@ -129,12 +121,7 @@ export const projectSchema = visibilitySchema.extend({
     .nullable()
     .default(null),
   featured: z.boolean().default(false),
-  /**
-   * Long Markdown page (README-style). `media:<file>` references are resolved to
-   * uploaded images when the content is imported.
-   */
   body: localizedTextSchema.nullable().default(null),
-  /** Card and header image, as a `media:<file>` reference. */
   cover: z.string().nullable().default(null),
   links: z.array(
     z.object({
@@ -152,7 +139,6 @@ export const educationSchema = visibilitySchema.extend({
   institutionShort: z.string().trim().min(1).nullable().default(null),
   degree: localizedTextSchema,
   period: periodSchema,
-  /** True while the end date is a forecast ("previsão de conclusão"). */
   endIsExpected: z.boolean(),
   summary: localizedTextSchema,
 });
@@ -180,7 +166,6 @@ export const siteSettingsSchema = z.object({
 });
 export type SiteSettingsContent = z.infer<typeof siteSettingsSchema>;
 
-/** The whole portfolio in one document; array order is display order. */
 export const portfolioSchema = z
   .object({
     profile: profileSchema,
@@ -241,5 +226,4 @@ export const portfolioSchema = z
     });
   });
 export type PortfolioContent = z.infer<typeof portfolioSchema>;
-/** Input shape (before defaults are applied), handy for writing seed data. */
 export type PortfolioInput = z.input<typeof portfolioSchema>;

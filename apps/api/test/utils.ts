@@ -22,7 +22,6 @@ process.env.MEDIA_DIR ??= mkdtempSync(join(tmpdir(), 'devprofile-test-media-'));
 // No site to refresh in tests: point revalidation at a closed port so it fails fast.
 process.env.WEB_INTERNAL_URL ??= 'http://127.0.0.1:9';
 
-/** Stores files from prisma/seed-media, like the real seed does. */
 export function seedMediaResolver(prisma: PrismaClient): MediaResolver {
   const storage = new MediaStorage(prisma);
   return async (file) => {
@@ -34,7 +33,6 @@ export function seedMediaResolver(prisma: PrismaClient): MediaResolver {
   };
 }
 
-/** Boots the real app against the Testcontainers database. */
 export async function createTestApp() {
   process.env.DATABASE_URL = inject('databaseUrl');
   const moduleRef = await Test.createTestingModule({

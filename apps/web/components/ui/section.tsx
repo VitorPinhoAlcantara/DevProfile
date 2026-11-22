@@ -2,7 +2,6 @@ import type { ReactNode } from 'react';
 import { MethodPill } from '@/components/ui/method-pill';
 import { type Section as SectionDef, shortPath } from '@/lib/sections';
 
-/** A page section; `data-section` is what the scroll spy watches. */
 export function Section({
   section,
   title,
@@ -11,7 +10,6 @@ export function Section({
 }: {
   section: SectionDef;
   title: string;
-  /** Keep the heading for screen readers only, showing just the endpoint. */
   hideTitle?: boolean;
   children: ReactNode;
 }) {
