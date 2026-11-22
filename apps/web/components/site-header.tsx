@@ -48,7 +48,9 @@ export function SiteHeader({
         >
           <Search className="size-3.5" aria-hidden />
           {t('search')}
-          <kbd className="ml-auto font-mono text-[0.6875rem] text-muted">Ctrl K</kbd>
+          <kbd className="ml-auto font-mono text-[0.6875rem] text-muted">
+            Ctrl K
+          </kbd>
         </button>
 
         <div className="ml-auto flex items-center gap-1 md:ml-0 pointer-coarse:gap-0">
