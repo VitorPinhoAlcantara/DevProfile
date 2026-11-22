@@ -243,7 +243,7 @@ export class PublicContentService {
   ): PublicProjectSummary {
     return {
       slug: row.slug,
-      name: row.name,
+      name: locale === 'en' ? (row.nameEn ?? row.name) : row.name,
       tagline: localized(row, 'tagline', locale),
       featured: row.featured,
       period: row.startDate ? { start: row.startDate, end: row.endDate } : null,

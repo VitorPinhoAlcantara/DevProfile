@@ -1,4 +1,4 @@
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, ArrowRight } from 'lucide-react';
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
@@ -52,6 +52,15 @@ export default async function ProjectPage({ params }: Props) {
     loadProject(slug, locale),
     getPortfolio(locale),
   ]);
+  // Same order as the home page: featured first.
+  const ordered = [
+    ...portfolio.projects.filter((p) => p.featured),
+    ...portfolio.projects.filter((p) => !p.featured),
+  ];
+  const index = ordered.findIndex((p) => p.slug === slug);
+  const previous = index > 0 ? ordered[index - 1] : undefined;
+  const next =
+    index >= 0 && index < ordered.length - 1 ? ordered[index + 1] : undefined;
 
   return (
     <WorkspaceShell portfolio={portfolio} meta={meta} withSections={false}>
@@ -84,7 +93,8 @@ export default async function ProjectPage({ params }: Props) {
                 project.coverUrl,
                 '(min-width: 1024px) 53rem, 100vw',
               )}
-              className="mt-6 w-full rounded-lg border border-line"
+              // w-auto: small images (icons) keep their size instead of being upscaled.
+              className="mt-6 h-auto w-auto max-w-full rounded-lg border border-line"
             />
           )}
 
@@ -132,6 +142,48 @@ export default async function ProjectPage({ params }: Props) {
           )}
         </aside>
       </article>
+
+      {(previous || next) && (
+        <nav
+          aria-label={t('more')}
+          className="mt-16 grid gap-3 border-t border-line pt-6 sm:grid-cols-2"
+        >
+          {previous && (
+            <Link
+              href={`/projects/${previous.slug}`}
+              className="group rounded-lg border border-line px-4 py-3 transition hover:border-line-strong"
+            >
+              <span className="flex items-center gap-1 text-xs text-muted">
+                <ArrowLeft
+                  className="size-3.5 transition group-hover:-translate-x-0.5"
+                  aria-hidden
+                />
+                {t('previous')}
+              </span>
+              <span className="mt-1 block font-medium text-fg">
+                {previous.name}
+              </span>
+            </Link>
+          )}
+          {next && (
+            <Link
+              href={`/projects/${next.slug}`}
+              className="group rounded-lg border border-line px-4 py-3 text-right transition hover:border-line-strong sm:col-start-2"
+            >
+              <span className="flex items-center justify-end gap-1 text-xs text-muted">
+                {t('next')}
+                <ArrowRight
+                  className="size-3.5 transition group-hover:translate-x-0.5"
+                  aria-hidden
+                />
+              </span>
+              <span className="mt-1 block font-medium text-fg">
+                {next.name}
+              </span>
+            </Link>
+          )}
+        </nav>
+      )}
     </WorkspaceShell>
   );
 }

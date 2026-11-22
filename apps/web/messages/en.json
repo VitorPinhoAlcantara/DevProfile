@@ -29,11 +29,8 @@
       "HYBRID": "hybrid",
       "ONSITE": "on-site"
     },
-    "metrics": {
-      "experience": "{count, plural, one {position} other {positions}}",
-      "projects": "{count, plural, one {project} other {projects}}",
-      "certifications": "{count, plural, one {certification} other {certifications}}"
-    },
+    "featured": "Featured work",
+    "live": "Live",
     "photoAlt": "Photo of {name}",
     "downloadCv": "Download resume"
   },
@@ -50,7 +47,9 @@
   },
   "projects": {
     "details": "View details",
-    "featured": "Featured",
+    "more": "More projects",
+    "previous": "Previous",
+    "next": "Next",
     "back": "Back to projects",
     "technologies": "Technologies",
     "links": "Links",

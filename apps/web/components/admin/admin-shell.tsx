@@ -7,6 +7,7 @@ import {
   History,
   Image as ImageIcon,
   LayoutDashboard,
+  Link2,
   LogOut,
   Mail,
   Moon,
@@ -63,6 +64,13 @@ const nav: {
     icon: ImageIcon,
     method: 'POST',
     endpoint: '/media',
+  },
+  {
+    href: '/admin/links',
+    label: 'Links',
+    icon: Link2,
+    method: 'POST',
+    endpoint: '/links',
   },
   {
     href: '/admin/messages',

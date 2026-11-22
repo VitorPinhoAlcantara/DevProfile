@@ -29,11 +29,8 @@
       "HYBRID": "híbrido",
       "ONSITE": "presencial"
     },
-    "metrics": {
-      "experience": "{count, plural, one {experiência} other {experiências}}",
-      "projects": "{count, plural, one {projeto} other {projetos}}",
-      "certifications": "{count, plural, one {certificação} other {certificações}}"
-    },
+    "featured": "Em destaque",
+    "live": "No ar",
     "photoAlt": "Foto de {name}",
     "downloadCv": "Baixar currículo"
   },
@@ -50,7 +47,9 @@
   },
   "projects": {
     "details": "Ver detalhes",
-    "featured": "Destaque",
+    "more": "Outros projetos",
+    "previous": "Anterior",
+    "next": "Próximo",
     "back": "Voltar para os projetos",
     "technologies": "Tecnologias",
     "links": "Links",

@@ -3,7 +3,10 @@
 import { ImagePlus } from 'lucide-react';
 import { useRef, useState } from 'react';
 import type { LocalizedText } from '@devprofile/shared';
-import { MediaPickerDialog } from '@/components/admin/media-library';
+import {
+  MediaPickerDialog,
+  useMediaLibrary,
+} from '@/components/admin/media-library';
 import { Button, TextArea } from '@/components/admin/ui';
 import { Markdown } from '@/components/markdown';
 import { cn } from '@/lib/cn';
@@ -22,10 +25,21 @@ export function MarkdownEditor({
   onChange: (value: LocalizedText | null) => void;
 }) {
   const [lang, setLang] = useState<Lang>('pt');
-  const [mode, setMode] = useState<'write' | 'preview'>('write');
+  const [mode, setMode] = useState<'write' | 'split' | 'preview'>('split');
   const [picking, setPicking] = useState(false);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const current = value ?? { pt: '', en: '' };
+  const { items: media } = useMediaLibrary();
+  const usedImages = [
+    ...new Set(
+      [...current[lang].matchAll(/\/api\/media\/([\w-]+\.\w+)/g)].map(
+        (m) => m[1]!,
+      ),
+    ),
+  ].map((key) => ({
+    key,
+    name: media?.find((item) => item.key === key)?.originalName ?? key,
+  }));
 
   const set = (text: string) => {
     const next = { ...current, [lang]: text };
@@ -59,46 +73,79 @@ export function MarkdownEditor({
           <Tab active={mode === 'write'} onClick={() => setMode('write')}>
             Escrever
           </Tab>
+          <Tab active={mode === 'split'} onClick={() => setMode('split')}>
+            Lado a lado
+          </Tab>
           <Tab active={mode === 'preview'} onClick={() => setMode('preview')}>
             Pré-visualizar
           </Tab>
         </div>
       </div>
 
-      {mode === 'write' ? (
-        <>
-          <TextArea
-            ref={textarea}
-            aria-label={`Página do projeto em ${lang.toUpperCase()}`}
-            rows={18}
-            value={current[lang]}
-            onChange={(e) => set(e.target.value)}
-            className="font-mono text-[0.8125rem]"
-            placeholder={
-              '## Sobre o projeto\n\nO que ele resolve, como funciona, qual foi a sua parte…'
-            }
-          />
-          <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
-            <Button onClick={() => setPicking(true)}>
-              <ImagePlus className="size-4" aria-hidden />
-              Inserir imagem
-            </Button>
-            <p className="text-xs text-soft">
-              Títulos com <code>##</code>, listas com <code>-</code>, tabelas e{' '}
-              <code>&gt; citações</code>. A legenda da imagem vem do texto entre
-              colchetes.
-            </p>
+      <div className={cn(mode === 'split' && 'grid gap-4 lg:grid-cols-2')}>
+        {mode !== 'preview' && (
+          <div className="min-w-0">
+            <TextArea
+              ref={textarea}
+              aria-label={`Página do projeto em ${lang.toUpperCase()}`}
+              rows={18}
+              value={current[lang]}
+              onChange={(e) => set(e.target.value)}
+              className="font-mono text-[0.8125rem]"
+              placeholder={
+                '## Sobre o projeto\n\nO que ele resolve, como funciona, qual foi a sua parte…'
+              }
+            />
+            {usedImages.length > 0 && (
+              <ul
+                className="mt-2 flex flex-wrap gap-2"
+                aria-label="Imagens no texto"
+              >
+                {usedImages.map((image) => (
+                  <li
+                    key={image.key}
+                    className="flex max-w-60 items-center gap-2 rounded-md border border-line bg-panel-2 py-1 pr-2 pl-1 text-xs text-muted"
+                  >
+                    <img
+                      src={`/api/media/${image.key}?w=320`}
+                      alt=""
+                      className="size-7 shrink-0 rounded object-cover"
+                    />
+                    <span className="truncate" title={image.name}>
+                      {image.name}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <div className="mt-2 flex flex-wrap items-center justify-between gap-2">
+              <Button onClick={() => setPicking(true)}>
+                <ImagePlus className="size-4" aria-hidden />
+                Inserir imagem
+              </Button>
+              <p className="text-xs text-soft">
+                Títulos com <code>##</code>, listas com <code>-</code>, tabelas
+                e <code>&gt; citações</code>. A legenda da imagem vem do texto
+                entre colchetes.
+              </p>
+            </div>
           </div>
-        </>
-      ) : (
-        <div className="min-h-40 rounded-md border border-line bg-bg p-5">
-          {current[lang].trim() ? (
-            <Markdown>{current[lang]}</Markdown>
-          ) : (
-            <p className="text-sm text-soft">Nada para mostrar ainda.</p>
-          )}
-        </div>
-      )}
+        )}
+        {mode !== 'write' && (
+          <div
+            className={cn(
+              'min-h-40 min-w-0 overflow-auto rounded-md border border-line bg-bg p-5',
+              mode === 'split' && 'lg:max-h-[34rem]',
+            )}
+          >
+            {current[lang].trim() ? (
+              <Markdown>{current[lang]}</Markdown>
+            ) : (
+              <p className="text-sm text-soft">Nada para mostrar ainda.</p>
+            )}
+          </div>
+        )}
+      </div>
 
       <MediaPickerDialog
         open={picking}

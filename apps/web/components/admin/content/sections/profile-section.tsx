@@ -29,6 +29,7 @@ export function ProfileSection({
         <h2 className="font-medium text-fg">Identidade</h2>
         <ImageField
           label="Foto do perfil"
+          round
           value={profile.photo}
           onChange={(photo) => set('photo', photo)}
           hint="Aparece só no site. O currículo não leva foto."

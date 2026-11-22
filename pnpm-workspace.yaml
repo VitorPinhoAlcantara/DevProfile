@@ -14,3 +14,8 @@ allowBuilds:
   # Ship prebuilt binaries through optional deps; install scripts aren't needed.
   '@parcel/watcher': false
   '@swc/core': false
+
+# Security floors for transitive deps (GHSA-q7qp-rjg7-q26m, GHSA-7589-6fvf-x4pw).
+overrides:
+  multer: '^2.5.0'
+  effect: '^3.22.1'

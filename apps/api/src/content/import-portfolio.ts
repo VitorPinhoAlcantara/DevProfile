@@ -163,6 +163,7 @@ export async function importPortfolio(
         data: {
           slug: project.slug,
           name: project.name,
+          nameEn: project.nameEn,
           taglinePt: project.tagline.pt,
           taglineEn: project.tagline.en,
           summaryPt: project.summary.pt,

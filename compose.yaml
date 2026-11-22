@@ -39,6 +39,13 @@ services:
       REVALIDATE_TOKEN: ${REVALIDATE_TOKEN:?set REVALIDATE_TOKEN in .env}
       WEB_INTERNAL_URL: http://web:3000
       COOKIE_SECURE: ${COOKIE_SECURE:-true}
+      # Short links and CV links are built on this address.
+      SITE_URL: ${SITE_URL:-http://localhost:7635}
+      # Short links report clicks on external CV links to Umami (empty disables it).
+      UMAMI_UPSTREAM: ${UMAMI_UPSTREAM:-host.docker.internal:20000}
+      UMAMI_WEBSITE_ID: ${UMAMI_WEBSITE_ID:-}
+    extra_hosts:
+      - host.docker.internal:host-gateway
     volumes:
       - uploads:/data/uploads
     depends_on:
@@ -100,3 +107,12 @@ volumes:
   postgres_data:
   # Images uploaded through the admin (and the seed screenshots). Back this up with the database.
   uploads:
+
+x-casaos:
+  main: caddy
+  icon: http://192.168.15.3:7635/favicon.ico
+  port_map: '7635'
+  scheme: http
+  index: /
+  title:
+    custom: DevProfile

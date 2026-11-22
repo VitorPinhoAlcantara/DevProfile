@@ -13,6 +13,7 @@ import {
   totpSetupSchema,
 } from '@devprofile/shared';
 import { hashPassword } from '../src/auth/crypto.js';
+import { LOGIN_LIMIT } from '../src/common/throttling.js';
 import type { PrismaClient } from '../src/generated/prisma/client.js';
 import { createTestApp, createTestPrisma, loadSeed } from './utils.js';
 
@@ -66,6 +67,21 @@ describe('admin API (e2e)', () => {
   afterAll(async () => {
     await app?.close();
     await prisma?.$disconnect();
+  });
+
+  it('rate limits login attempts per client IP', async () => {
+    const attempt = () =>
+      http()
+        .post('/api/admin/auth/login')
+        .set('CF-Connecting-IP', '198.51.100.250')
+        .send({ email: EMAIL, password: 'senha-errada-123' });
+    for (let i = 0; i < LOGIN_LIMIT.limit; i++) await attempt().expect(401);
+    const blocked = await attempt().expect(429);
+    expect(blocked.body.error.code).toBe('RATE_LIMITED');
+  });
+
+  it('rejects passwords longer than 256 characters before hashing', async () => {
+    await login({ email: EMAIL, password: 'a'.repeat(257) }).expect(400);
   });
 
   describe('authentication', () => {
@@ -211,6 +227,14 @@ describe('admin API (e2e)', () => {
         .delete(`/api/admin/media/${media.key}`)
         .expect(409);
       expect(blocked.body.error.code).toBe('MEDIA_IN_USE');
+    });
+
+    it('rejects uploads over 10 MB', async () => {
+      const res = await authed
+        .post('/api/admin/media')
+        .attach('file', Buffer.alloc(10 * 1024 * 1024 + 1), 'huge.png')
+        .expect(413);
+      expect(res.body.error.code).toBe('PAYLOAD_TOO_LARGE');
     });
 
     it('rejects files that are not images', async () => {

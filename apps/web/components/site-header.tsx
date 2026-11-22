@@ -16,9 +16,12 @@ const localeLabels: Record<Locale, string> = { 'pt-BR': 'PT', en: 'EN' };
 export function SiteHeader({
   name,
   version,
+  withDevMode = true,
 }: {
   name: string;
   version: string;
+  /** Pages without the API panel hide the toggle, which would do nothing there. */
+  withDevMode?: boolean;
 }) {
   const t = useTranslations('header');
   const locale = useLocale();
@@ -45,7 +48,7 @@ export function SiteHeader({
         >
           <Search className="size-3.5" aria-hidden />
           {t('search')}
-          <kbd className="ml-auto font-mono text-[0.6875rem]">Ctrl K</kbd>
+          <kbd className="ml-auto font-mono text-[0.6875rem] text-muted">Ctrl K</kbd>
         </button>
 
         <div className="ml-auto flex items-center gap-1 md:ml-0 pointer-coarse:gap-0">
@@ -68,21 +71,23 @@ export function SiteHeader({
           </a>
           <LocaleSwitch label={t('language')} />
           <ThemeToggle label={t('toggleTheme')} />
-          <button
-            type="button"
-            onClick={toggleDev}
-            aria-pressed={devOpen}
-            title={t('devModeHint')}
-            className={cn(
-              'ml-1 hidden h-8 items-center gap-1.5 rounded-md border px-2.5 text-sm transition xl:flex pointer-coarse:h-11',
-              devOpen
-                ? 'border-accent/40 bg-accent-soft text-accent'
-                : 'border-line text-muted hover:border-line-strong',
-            )}
-          >
-            <Code2 className="size-4" aria-hidden />
-            {t('devMode')}
-          </button>
+          {withDevMode && (
+            <button
+              type="button"
+              onClick={toggleDev}
+              aria-pressed={devOpen}
+              title={t('devModeHint')}
+              className={cn(
+                'ml-1 hidden h-8 items-center gap-1.5 rounded-md border px-2.5 text-sm transition xl:flex pointer-coarse:h-11',
+                devOpen
+                  ? 'border-accent/40 bg-accent-soft text-accent'
+                  : 'border-line text-muted hover:border-line-strong',
+              )}
+            >
+              <Code2 className="size-4" aria-hidden />
+              {t('devMode')}
+            </button>
+          )}
         </div>
       </div>
     </header>

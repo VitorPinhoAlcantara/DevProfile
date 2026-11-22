@@ -15,7 +15,7 @@ export function WorkspaceGrid({ children }: { children: ReactNode }) {
       className={cn(
         'lg:grid lg:grid-cols-[12.5rem_minmax(0,1fr)] lg:gap-8 2xl:grid-cols-[14rem_minmax(0,1fr)] 2xl:gap-12',
         devOpen &&
-          'xl:grid-cols-[12.5rem_minmax(0,1fr)_24rem] 2xl:grid-cols-[14rem_minmax(0,1fr)_30rem]',
+          'xl:grid-cols-[12.5rem_minmax(0,1fr)_22rem] 2xl:grid-cols-[14rem_minmax(0,1fr)_26rem]',
       )}
     >
       <div className="hidden py-8 lg:block">
@@ -24,7 +24,7 @@ export function WorkspaceGrid({ children }: { children: ReactNode }) {
       <SectionTabs />
       <main className="min-w-0 space-y-10 py-8">{children}</main>
       {devOpen && (
-        <div className="hidden py-8 xl:block">
+        <div className="hidden pt-8 xl:block">
           <DevSidebar />
         </div>
       )}

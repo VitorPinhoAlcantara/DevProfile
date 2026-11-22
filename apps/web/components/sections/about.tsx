@@ -1,9 +1,10 @@
-import { Download, MapPin } from 'lucide-react';
+import { ArrowRight, Download, Globe, MapPin } from 'lucide-react';
 import Image from 'next/image';
 import { getLocale, getTranslations } from 'next-intl/server';
 import type { PublicPortfolio } from '@devprofile/shared';
 import { ContactIcon, isExternal } from '@/components/ui/contact-icon';
 import { Section } from '@/components/ui/section';
+import { Link } from '@/i18n/navigation';
 import { trackClick } from '@/lib/analytics';
 import { cn } from '@/lib/cn';
 import { sections } from '@/lib/sections';
@@ -27,22 +28,7 @@ export async function AboutSection({
     .slice(0, 3);
   const locale = await getLocale();
 
-  const metrics = [
-    {
-      count: portfolio.experience.length,
-      label: t('metrics.experience', { count: portfolio.experience.length }),
-    },
-    {
-      count: portfolio.projects.length,
-      label: t('metrics.projects', { count: portfolio.projects.length }),
-    },
-    {
-      count: portfolio.certifications.length,
-      label: t('metrics.certifications', {
-        count: portfolio.certifications.length,
-      }),
-    },
-  ];
+  const featured = portfolio.projects.filter((p) => p.featured).slice(0, 3);
 
   return (
     <Section section={sections[0]} title={tNav('about')} hideTitle>
@@ -102,25 +88,67 @@ export async function AboutSection({
           <Download className="size-4" aria-hidden />
           {t('downloadCv')}
         </a>
+        {/* E-mail keeps its label; profile links become icon buttons to cut the choices to two. */}
         {heroContacts.map((contact) => (
           <ContactButton
             key={contact.href}
             contact={contact}
+            iconOnly={contact.kind !== 'EMAIL'}
             className="border-line-strong text-fg hover:bg-panel-2"
           />
         ))}
       </div>
 
-      <dl className="mt-6 grid grid-cols-3 gap-2 sm:max-w-md">
-        {metrics.map((metric) => (
-          <div key={metric.label} className="rounded-lg bg-panel px-3 py-2.5">
-            <dd className="text-xl font-semibold text-fg">{metric.count}</dd>
-            <dt className="text-xs text-soft">{metric.label}</dt>
-          </div>
-        ))}
-      </dl>
+      {featured.length > 0 && (
+        <div className="mt-8 sm:max-w-2xl">
+          <h2 className="text-sm font-medium text-muted">{t('featured')}</h2>
+          <ul className="mt-2 divide-y divide-line rounded-lg border border-line bg-panel">
+            {featured.map((project) => {
+              const site = project.links.find((l) => l.kind === 'WEBSITE');
+              return (
+                <li
+                  key={project.slug}
+                  className="group relative flex items-center gap-4 px-4 py-3 transition hover:bg-panel-2"
+                >
+                  <div className="min-w-0 flex-1">
+                    <Link
+                      href={`/projects/${project.slug}`}
+                      className="font-medium text-fg after:absolute after:inset-0"
+                    >
+                      {project.name}
+                    </Link>
+                    <p className="mt-0.5 line-clamp-2 text-sm text-muted sm:line-clamp-1">
+                      {project.tagline}
+                    </p>
+                  </div>
+                  {site && (
+                    <a
+                      href={site.href}
+                      target="_blank"
+                      rel="noreferrer"
+                      {...trackClick('project-link', {
+                        project: project.slug,
+                        kind: site.kind,
+                        place: 'hero',
+                      })}
+                      className="relative z-10 inline-flex shrink-0 items-center gap-1.5 rounded-full bg-get-soft px-2.5 py-1 text-xs font-medium text-get hover:underline pointer-coarse:min-h-11"
+                    >
+                      <Globe className="size-3.5" aria-hidden />
+                      {t('live')}
+                    </a>
+                  )}
+                  <ArrowRight
+                    className="size-4 shrink-0 text-muted transition group-hover:translate-x-0.5 group-hover:text-accent"
+                    aria-hidden
+                  />
+                </li>
+              );
+            })}
+          </ul>
+        </div>
+      )}
 
-      <p className="mt-6 max-w-3xl leading-relaxed text-muted">
+      <p className="mt-6 max-w-[60ch] leading-relaxed text-muted">
         {profile.summary}
       </p>
     </Section>
@@ -130,9 +158,11 @@ export async function AboutSection({
 function ContactButton({
   contact,
   className,
+  iconOnly = false,
 }: {
   contact: PublicPortfolio['contacts'][number];
   className: string;
+  iconOnly?: boolean;
 }) {
   const external = isExternal(contact.href);
   return (
@@ -140,13 +170,16 @@ function ContactButton({
       href={contact.href}
       {...(external ? { target: '_blank', rel: 'noreferrer' } : {})}
       {...trackClick('contact-click', { kind: contact.kind, place: 'hero' })}
+      aria-label={iconOnly ? contact.label : undefined}
+      title={iconOnly ? contact.label : undefined}
       className={cn(
-        'inline-flex h-9 items-center gap-2 rounded-md border px-3.5 text-sm font-medium transition pointer-coarse:h-11',
+        'inline-flex h-9 items-center gap-2 rounded-md border text-sm font-medium transition pointer-coarse:h-11',
+        iconOnly ? 'w-9 justify-center pointer-coarse:w-11' : 'px-3.5',
         className,
       )}
     >
       <ContactIcon kind={contact.kind} className="size-4" />
-      {contact.label}
+      {!iconOnly && contact.label}
     </a>
   );
 }

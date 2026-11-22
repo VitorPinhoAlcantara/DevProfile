@@ -30,6 +30,51 @@ export function changedSections(
   );
 }
 
+type Item = Record<string, unknown>;
+
+const itemLabel = (item: Item): string => {
+  const name = item.name ?? item.company ?? item.institution ?? item.label;
+  if (typeof name === 'string') return name;
+  if (name && typeof name === 'object' && 'pt' in name) return String(name.pt);
+  return '?';
+};
+const itemKey = (item: Item) =>
+  typeof item.slug === 'string' ? item.slug : itemLabel(item);
+
+/** One line per changed item, e.g. `StreetUrban editado`, for the history list. */
+export function changeDetails(
+  before: PortfolioContent | null,
+  after: PortfolioContent | null,
+): string[] {
+  const details: string[] = [];
+  for (const section of changedSections(before, after)) {
+    const old = before?.[section];
+    const next = after?.[section];
+    if (!Array.isArray(old) || !Array.isArray(next)) continue;
+    const oldByKey = new Map((old as Item[]).map((i) => [itemKey(i), i]));
+    const nextKeys = new Set((next as Item[]).map(itemKey));
+    for (const item of next as Item[]) {
+      const previous = oldByKey.get(itemKey(item));
+      if (!previous) details.push(`${itemLabel(item)} adicionado`);
+      else if (JSON.stringify(previous) !== JSON.stringify(item))
+        details.push(`${itemLabel(item)} editado`);
+    }
+    for (const item of old as Item[])
+      if (!nextKeys.has(itemKey(item)))
+        details.push(`${itemLabel(item)} removido`);
+    const sameItems =
+      old.length === next.length &&
+      (next as Item[]).every((i) => oldByKey.has(itemKey(i)));
+    if (
+      sameItems &&
+      (old as Item[]).map(itemKey).join() !==
+        (next as Item[]).map(itemKey).join()
+    )
+      details.push('ordem alterada');
+  }
+  return details;
+}
+
 /**
  * The admin edits the portfolio as one document. Each save replaces the content,
  * keeps before/after snapshots in the audit log (for history and undo) and
@@ -99,6 +144,10 @@ export class ContentAdminService {
       createdAt: entry.createdAt.toISOString(),
       actor: entry.actor?.email ?? null,
       changed: changedSections(
+        entry.before as PortfolioContent | null,
+        entry.after as PortfolioContent | null,
+      ),
+      details: changeDetails(
         entry.before as PortfolioContent | null,
         entry.after as PortfolioContent | null,
       ),

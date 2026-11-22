@@ -114,6 +114,7 @@ export async function exportPortfolio(db: Db): Promise<PortfolioContent> {
     projects: projects.map((p) => ({
       slug: p.slug,
       name: p.name,
+      nameEn: p.nameEn,
       tagline: both(p.taglinePt, p.taglineEn),
       summary: both(p.summaryPt, p.summaryEn),
       cvBullets: { pt: p.cvBulletsPt, en: p.cvBulletsEn },

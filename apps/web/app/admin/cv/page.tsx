@@ -120,14 +120,7 @@ function CvView() {
       </div>
 
       <div className="grid gap-6 xl:grid-cols-[minmax(0,1fr)_22rem]">
-        <div className="overflow-hidden rounded-lg border border-line bg-white">
-          <iframe
-            key={fileUrl('pdf', true)}
-            src={fileUrl('pdf', true)}
-            title="Prévia do currículo"
-            className="h-[80vh] w-full"
-          />
-        </div>
+        <PdfPreview key={fileUrl('pdf', true)} src={fileUrl('pdf', true)} />
 
         <Card className="space-y-4 self-start xl:sticky xl:top-6">
           <div>
@@ -180,5 +173,33 @@ function CvView() {
         </Card>
       </div>
     </>
+  );
+}
+
+/** The PDF takes a few seconds to build; say so instead of showing a blank box. */
+function PdfPreview({ src }: { src: string }) {
+  const [loaded, setLoaded] = useState(false);
+  // Some browsers never fire `load` for a PDF in an iframe; don't cover it forever.
+  useEffect(() => {
+    const timer = setTimeout(() => setLoaded(true), 10_000);
+    return () => clearTimeout(timer);
+  }, []);
+  return (
+    <div className="relative overflow-hidden rounded-lg border border-line bg-white">
+      {!loaded && (
+        <p
+          role="status"
+          className="absolute inset-0 flex items-center justify-center bg-panel font-mono text-sm text-soft"
+        >
+          Gerando o PDF…
+        </p>
+      )}
+      <iframe
+        src={src}
+        title="Prévia do currículo"
+        onLoad={() => setLoaded(true)}
+        className="h-[80vh] w-full"
+      />
+    </div>
   );
 }

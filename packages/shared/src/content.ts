@@ -119,6 +119,8 @@ export type ExperienceContent = z.infer<typeof experienceSchema>;
 export const projectSchema = visibilitySchema.extend({
   slug: slugSchema,
   name: z.string().trim().min(1),
+  /** Only when the name changes in English; brand names stay as-is. */
+  nameEn: z.string().trim().min(1).nullable().default(null),
   tagline: localizedTextSchema,
   summary: localizedTextSchema,
   cvBullets: localizedListSchema,

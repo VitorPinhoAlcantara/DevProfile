@@ -182,6 +182,7 @@ model Project {
   id          String        @id @default(uuid(7))
   slug        String        @unique
   name        String
+  nameEn      String?
   taglinePt   String
   taglineEn   String
   summaryPt   String
@@ -355,4 +356,18 @@ model AuditLog {
 
   @@index([entity, entityId])
   @@index([createdAt])
+}
+
+/// Short links (/r/<slug>) that land on the site with UTM parameters. The CV routes
+/// its links through one of them, so each sent CV shows up as its own source.
+model ShortLink {
+  id          String   @id @default(uuid(7))
+  slug        String   @unique
+  source      String
+  medium      String
+  campaign    String?
+  destination String   @default("/")
+  note        String?
+  clicks      Int      @default(0)
+  createdAt   DateTime @default(now())
 }

@@ -6,9 +6,10 @@ import {
   HttpStatus,
   Logger,
 } from '@nestjs/common';
-import type { Response } from 'express';
+import type { Request, Response } from 'express';
 import type { ApiError } from '@devprofile/shared';
 import { ApiException } from './api.exception.js';
+import { clientIp } from './client-ip.js';
 import { ValidationException } from './validation.js';
 
 const codeByStatus: Record<number, string> = {
@@ -22,6 +23,12 @@ const codeByStatus: Record<number, string> = {
   [HttpStatus.SERVICE_UNAVAILABLE]: 'SERVICE_UNAVAILABLE',
 };
 
+const securityStatuses = new Set([
+  HttpStatus.UNAUTHORIZED,
+  HttpStatus.FORBIDDEN,
+  HttpStatus.TOO_MANY_REQUESTS,
+]);
+
 /** Turns every error into the `ApiError` envelope documented in OpenAPI. */
 @Catch()
 export class ApiExceptionFilter implements ExceptionFilter {
@@ -29,6 +36,7 @@ export class ApiExceptionFilter implements ExceptionFilter {
 
   catch(exception: unknown, host: ArgumentsHost) {
     const res = host.switchToHttp().getResponse<Response>();
+    const req = host.switchToHttp().getRequest<Request>();
 
     if (exception instanceof ValidationException) {
       res.status(HttpStatus.BAD_REQUEST).json({
@@ -43,6 +51,12 @@ export class ApiExceptionFilter implements ExceptionFilter {
 
     if (exception instanceof HttpException) {
       const status = exception.getStatus();
+      // Failed logins, blocked admin calls and rate limits are the signals worth watching.
+      if (securityStatuses.has(status)) {
+        this.logger.warn(
+          `${status} ${req.method} ${req.originalUrl} ip=${clientIp(req) ?? '?'}`,
+        );
+      }
       res.status(status).json({
         error: {
           code:

@@ -51,7 +51,10 @@ export default async function HomePage({
       <ContactSection contacts={contacts} />
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        // Escaping `<` keeps admin-edited text from closing the script tag.
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(jsonLd).replace(/</g, '\\u003c'),
+        }}
       />
     </WorkspaceShell>
   );

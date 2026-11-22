@@ -119,6 +119,11 @@ function HistoryView() {
                     por {entry.actor}
                   </span>
                 )}
+                {entry.details.length > 0 && (
+                  <span className="mt-0.5 block text-xs text-muted">
+                    {entry.details.join(' · ')}
+                  </span>
+                )}
               </span>
               <Button
                 variant="ghost"

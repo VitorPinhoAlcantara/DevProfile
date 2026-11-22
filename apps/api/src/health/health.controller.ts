@@ -29,7 +29,6 @@ export class HealthController {
     return {
       status: databaseUp ? 'ok' : 'degraded',
       service: 'api',
-      uptimeSeconds: Math.round(process.uptime()),
       checks: { database: databaseUp ? 'up' : 'down' },
     };
   }

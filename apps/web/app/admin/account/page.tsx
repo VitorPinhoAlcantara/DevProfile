@@ -1,6 +1,6 @@
 'use client';
 
-import { ShieldCheck } from 'lucide-react';
+import { ShieldAlert, ShieldCheck } from 'lucide-react';
 import { type FormEvent, useState } from 'react';
 import {
   MIN_PASSWORD_LENGTH,
@@ -190,8 +190,12 @@ function TwoFactorCard() {
   return (
     <Card className="space-y-4">
       <h2 className="flex items-center gap-2 font-medium text-fg">
-        <ShieldCheck className="size-4 text-get" aria-hidden /> Verificação em
-        duas etapas
+        {me.totpEnabled ? (
+          <ShieldCheck className="size-4 text-get" aria-hidden />
+        ) : (
+          <ShieldAlert className="size-4 text-post" aria-hidden />
+        )}{' '}
+        Verificação em duas etapas
       </h2>
       {feedback && <Notice tone={feedback.tone}>{feedback.text}</Notice>}
 

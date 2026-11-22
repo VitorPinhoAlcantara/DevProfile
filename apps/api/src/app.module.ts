@@ -4,6 +4,7 @@ import { AdminModule } from './admin/admin.module.js';
 import { AuthModule } from './auth/auth.module.js';
 import { CONTACT_LIMIT, LOGIN_LIMIT } from './common/throttling.js';
 import { CvModule } from './cv/cv.module.js';
+import { LinksModule } from './links/links.module.js';
 import { ContactModule } from './contact/contact.module.js';
 import { HealthModule } from './health/health.module.js';
 import { MediaModule } from './media/media.module.js';
@@ -22,6 +23,7 @@ import { PublicContentModule } from './public/public-content.module.js';
     ContactModule,
     MediaModule,
     CvModule,
+    LinksModule,
     OpenApiModule,
   ],
 })

@@ -202,7 +202,7 @@ export function DevSidebar() {
   return (
     <aside
       aria-label="API"
-      className="sticky top-20 hidden h-[calc(100vh-6.5rem)] overflow-hidden rounded-lg border border-line bg-panel xl:block"
+      className="sticky top-20 hidden h-[calc(100vh-7.5rem)] overflow-hidden rounded-lg border border-line bg-panel xl:block"
     >
       <DevPanelBody />
     </aside>
@@ -216,9 +216,13 @@ export function DevDrawer() {
 
   return (
     <Drawer.Root open={open} onOpenChange={setOpen}>
-      <Drawer.Trigger className="fixed right-4 bottom-4 z-30 flex items-center gap-1.5 rounded-full border border-line-strong bg-panel px-3.5 py-2 font-mono text-xs text-fg shadow-lg xl:hidden pointer-coarse:min-h-11">
-        <Braces className="size-3.5" aria-hidden />
-        {t('open')}
+      {/* Icon-only on phones so it covers less of the text underneath. */}
+      <Drawer.Trigger
+        aria-label={t('open')}
+        className="fixed right-4 bottom-4 z-30 flex size-11 items-center justify-center gap-1.5 rounded-full border border-line-strong bg-panel font-mono text-xs text-fg shadow-lg sm:size-auto sm:px-3.5 sm:py-2 xl:hidden pointer-coarse:min-h-11"
+      >
+        <Braces className="size-4 sm:size-3.5" aria-hidden />
+        <span className="hidden sm:inline">{t('open')}</span>
       </Drawer.Trigger>
       <Drawer.Portal>
         <Drawer.Overlay className="fixed inset-0 z-40 bg-black/50" />

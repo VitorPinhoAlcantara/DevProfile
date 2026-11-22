@@ -44,8 +44,9 @@ export function formatPeriod(
   locale: Locale,
   presentLabel: string,
 ): string {
+  const start = formatPartialDate(period.start, locale);
   const end = period.end ? formatPartialDate(period.end, locale) : presentLabel;
-  return `${formatPartialDate(period.start, locale)} – ${end}`;
+  return start === end ? start : `${start} – ${end}`;
 }
 
 const toMonthIndex = (value: string) => {

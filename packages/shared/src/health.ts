@@ -4,7 +4,6 @@ export const healthResponseSchema = z
   .object({
     status: z.enum(['ok', 'degraded']),
     service: z.string(),
-    uptimeSeconds: z.number().nonnegative(),
     checks: z.object({
       database: z.enum(['up', 'down']),
     }),

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import type { CvReport, Locale } from '@devprofile/shared';
 import { exportPortfolio } from '../content/export-portfolio.js';
+import { LinksService } from '../links/links.service.js';
 import { PrismaService } from '../prisma/prisma.service.js';
 import { checkCv } from './cv-checks.js';
 import { buildCvData, type CvData } from './cv-data.js';
@@ -25,14 +26,18 @@ type Generated = {
 export class CvService {
   private cache = new Map<string, Generated>();
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly links: LinksService,
+  ) {}
 
-  async pdf(locale: Locale) {
-    return (await this.generate(locale)).pdf;
+  /** `link` is a short-link slug: the CV's links go through it (default: `curriculo`). */
+  async pdf(locale: Locale, link?: string) {
+    return (await this.generate(locale, link)).pdf;
   }
 
-  async docx(locale: Locale) {
-    const generated = await this.generate(locale);
+  async docx(locale: Locale, link?: string) {
+    const generated = await this.generate(locale, link);
     generated.docx ??= renderCvDocx(generated.data);
     return generated.docx;
   }
@@ -64,15 +69,20 @@ export class CvService {
       : `${name}-CV-PT.${extension}`;
   }
 
-  private async generate(locale: Locale): Promise<Generated> {
+  private async generate(locale: Locale, link?: string): Promise<Generated> {
     const settings = await this.prisma.siteSettings.findUniqueOrThrow({
       where: { id: 1 },
     });
-    const key = `${settings.contentUpdatedAt.toISOString()}:${locale}`;
+    const { slug, linker } = await this.links.cvLinker(link, locale);
+    const key = `${settings.contentUpdatedAt.toISOString()}:${locale}:${slug ?? '-'}`;
     const cached = this.cache.get(key);
     if (cached) return cached;
 
-    const data = buildCvData(await exportPortfolio(this.prisma), locale);
+    const data = buildCvData(
+      await exportPortfolio(this.prisma),
+      locale,
+      linker,
+    );
     const { pdf, pages } = renderCvPdf(data);
     const generated: Generated = { data, pdf, pages, generatedAt: new Date() };
 

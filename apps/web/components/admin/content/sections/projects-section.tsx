@@ -52,6 +52,7 @@ export function ProjectsSection({ content, update }: SectionProps) {
       createItem={() => ({
         slug: `projeto-${Date.now().toString(36)}`,
         name: '',
+        nameEn: null,
         tagline: emptyText(),
         summary: emptyText(),
         cvBullets: emptyList(),
@@ -82,6 +83,12 @@ export function ProjectsSection({ content, update }: SectionProps) {
                       : project.slug,
                 })
               }
+            />
+            <OptionalTextField
+              label="Nome em inglês (opcional)"
+              value={project.nameEn}
+              onChange={(nameEn) => set({ ...project, nameEn })}
+              hint="Só se o nome muda em inglês; nomes de marca ficam iguais."
             />
             <TextField
               label="Endereço (slug)"

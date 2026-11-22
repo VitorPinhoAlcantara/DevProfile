@@ -10,10 +10,15 @@ export const totpCodeSchema = z
   .string()
   .regex(/^\d{6}$/, 'Use os 6 dígitos do app autenticador.');
 
+// Argon2 hashes the whole input, so an unbounded password is a cheap way to burn CPU.
+const MAX_PASSWORD_LENGTH = 256;
+const passwordInput = (message: string) =>
+  z.string().min(1, message).max(MAX_PASSWORD_LENGTH);
+
 export const loginInputSchema = z
   .object({
     email: z.email('Informe um e-mail válido.'),
-    password: z.string().min(1, 'Informe a senha.'),
+    password: passwordInput('Informe a senha.'),
     totp: totpCodeSchema.optional(),
   })
   .meta({ id: 'LoginInput' });
@@ -31,13 +36,14 @@ export const MIN_PASSWORD_LENGTH = 12;
 
 export const changePasswordInputSchema = z
   .object({
-    currentPassword: z.string().min(1, 'Informe a senha atual.'),
+    currentPassword: passwordInput('Informe a senha atual.'),
     newPassword: z
       .string()
       .min(
         MIN_PASSWORD_LENGTH,
         `Use pelo menos ${MIN_PASSWORD_LENGTH} caracteres.`,
-      ),
+      )
+      .max(MAX_PASSWORD_LENGTH),
   })
   .meta({ id: 'ChangePasswordInput' });
 export type ChangePasswordInput = z.infer<typeof changePasswordInputSchema>;
@@ -56,7 +62,7 @@ export const totpEnableInputSchema = z
   .meta({ id: 'TotpEnableInput' });
 
 export const totpDisableInputSchema = z
-  .object({ code: totpCodeSchema, password: z.string().min(1) })
+  .object({ code: totpCodeSchema, password: passwordInput('Informe a senha.') })
   .meta({ id: 'TotpDisableInput' });
 
 /** The whole portfolio plus the version it was read at (optimistic locking). */
@@ -135,6 +141,8 @@ export const historyEntrySchema = z
     actor: z.string().nullable(),
     /** Top-level parts of the portfolio that changed in this save. */
     changed: z.array(z.enum(portfolioSections)),
+    /** Item-level summary, e.g. `StreetUrban editado`. */
+    details: z.array(z.string()),
   })
   .meta({ id: 'HistoryEntry' });
 export type HistoryEntry = z.infer<typeof historyEntrySchema>;
@@ -176,3 +184,53 @@ export const cvReportSchema = z
   })
   .meta({ id: 'CvReport' });
 export type CvReport = z.infer<typeof cvReportSchema>;
+
+/** Values that go into UTM parameters and link slugs: lowercase, no spaces. */
+const utmValue = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .min(1, 'Preencha este campo.')
+  .max(60)
+  .regex(
+    /^[a-z0-9][a-z0-9._-]*$/,
+    'Use letras minúsculas, números, ponto, hífen ou sublinhado.',
+  );
+
+/** `utm_medium` suggestions; `curriculo` is the one the CV generator understands. */
+export const linkMediums = [
+  'curriculo',
+  'social',
+  'email',
+  'mensagem',
+  'evento',
+  'outro',
+] as const;
+
+export const shortLinkInputSchema = z
+  .object({
+    slug: utmValue,
+    source: utmValue,
+    medium: utmValue,
+    campaign: utmValue.nullable().default(null),
+    destination: z
+      .string()
+      .trim()
+      .max(200)
+      .regex(/^\/(?!\/)\S*$/, 'Use um caminho do site, como / ou /projects/x.')
+      .default('/'),
+    note: z.string().trim().max(200).nullable().default(null),
+  })
+  .meta({ id: 'ShortLinkInput' });
+export type ShortLinkInput = z.infer<typeof shortLinkInputSchema>;
+
+export const shortLinkSchema = shortLinkInputSchema
+  .extend({
+    id: z.string(),
+    /** The short address to share, e.g. `https://alcantara.dev.br/r/empresa-x`. */
+    url: z.string(),
+    clicks: z.number(),
+    createdAt: z.iso.datetime(),
+  })
+  .meta({ id: 'ShortLink' });
+export type ShortLink = z.infer<typeof shortLinkSchema>;

@@ -28,7 +28,11 @@ export function WorkspaceShell({
   return (
     <WorkspaceProvider>
       <div className="flex min-h-screen flex-col">
-        <SiteHeader name={profile.fullName} version={meta.version} />
+        <SiteHeader
+          name={profile.fullName}
+          version={meta.version}
+          withDevMode={withSections}
+        />
         <div className="mx-auto w-full max-w-[110rem] flex-1 px-4 sm:px-6">
           {withSections ? (
             <WorkspaceGrid>{children}</WorkspaceGrid>

@@ -7,7 +7,18 @@
 :80 {
 	encode zstd gzip
 
+	# The tunnel marks visits that reached Cloudflare over plain http; send them to https.
+	# Direct LAN/Gatus requests carry no Cf-Visitor header and are left alone.
+	@plainHttp header Cf-Visitor *"scheme":"http"*
+	redir @plainHttp https://{host}{uri} 308
+
 	handle /api/* {
+		reverse_proxy api:3001
+	}
+
+	# Short links (alcantara.dev.br/r/<slug>) live in the api.
+	handle /r/* {
+		rewrite * /api{uri}
 		reverse_proxy api:3001
 	}
 

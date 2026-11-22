@@ -53,7 +53,8 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  // Scroll spy: the active section is the last one whose top crossed the upper third.
+  // Scroll spy: the active section is the last one whose top passed the upper third,
+  // or the last section once the page can't scroll further (short final sections).
   useEffect(() => {
     const elements = sections
       .map((s) =>
@@ -62,21 +63,31 @@ export function WorkspaceProvider({ children }: { children: ReactNode }) {
       .filter((el): el is HTMLElement => el !== null);
     if (elements.length === 0) return;
 
-    const visible = new Set<string>();
-    const observer = new IntersectionObserver(
-      (entries) => {
-        for (const entry of entries) {
-          const id = (entry.target as HTMLElement).dataset.section!;
-          if (entry.isIntersecting) visible.add(id);
-          else visible.delete(id);
-        }
-        const current = sections.findLast((s) => visible.has(s.id));
-        if (current) setActiveSection(current.id);
-      },
-      { rootMargin: '-20% 0px -55% 0px' },
-    );
-    elements.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    let frame = 0;
+    const update = () => {
+      frame = 0;
+      const atBottom =
+        window.innerHeight + window.scrollY >=
+        document.documentElement.scrollHeight - 4;
+      const line = window.innerHeight / 3;
+      const current = atBottom
+        ? elements.at(-1)
+        : elements.findLast((el) => el.getBoundingClientRect().top <= line);
+      setActiveSection(
+        (current?.dataset.section as SectionId | undefined) ?? 'about',
+      );
+    };
+    const onScroll = () => {
+      if (!frame) frame = requestAnimationFrame(update);
+    };
+    update();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      window.removeEventListener('resize', onScroll);
+      cancelAnimationFrame(frame);
+    };
   }, []);
 
   const value = useMemo(

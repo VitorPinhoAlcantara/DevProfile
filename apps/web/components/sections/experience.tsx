@@ -45,7 +45,7 @@ export async function ExperienceSection({
               </h3>
               <p className="font-mono text-xs text-soft">
                 {formatPeriod(item.period, locale, t('present'))}
-                <span className="ml-2 text-soft/80">
+                <span className="ml-2 text-soft">
                   ({formatDuration(item.period, locale)})
                 </span>
               </p>
@@ -54,7 +54,7 @@ export async function ExperienceSection({
               {t(`employmentTypes.${item.employmentType}`)}
               {item.location && ` · ${item.location}`}
             </p>
-            <p className="mt-3 max-w-3xl leading-relaxed text-muted">
+            <p className="mt-3 max-w-[60ch] leading-relaxed text-muted">
               {item.summary}
             </p>
             <div className="mt-3 space-y-2">

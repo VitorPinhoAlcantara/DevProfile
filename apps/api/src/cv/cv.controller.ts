@@ -26,6 +26,10 @@ const cvQuerySchema = z
       .default('false')
       .transform((v) => v === 'true')
       .meta({ description: 'Abrir no navegador em vez de baixar' }),
+    link: z.string().max(60).optional().meta({
+      description:
+        'Slug de um link curto: os links do currículo passam por ele (padrão: `curriculo`)',
+    }),
   })
   .meta({ id: 'CvQuery' });
 
@@ -55,8 +59,8 @@ export class CvController {
   ) {
     const file =
       query.format === 'pdf'
-        ? await this.cv.pdf(query.lang)
-        : await this.cv.docx(query.lang);
+        ? await this.cv.pdf(query.lang, query.link)
+        : await this.cv.docx(query.lang, query.link);
     const name = await this.cv.fileName(query.lang, query.format);
     res.setHeader('Content-Type', MIME[query.format]);
     res.setHeader(

@@ -46,7 +46,7 @@ export async function EducationSection({
                 {formatPeriod(item.period, locale, tExp('present'))}
                 {item.endIsExpected && ` (${t('expected')})`}
               </p>
-              <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">
+              <p className="mt-2 max-w-[66ch] text-sm leading-relaxed text-muted">
                 {item.summary}
               </p>
             </div>

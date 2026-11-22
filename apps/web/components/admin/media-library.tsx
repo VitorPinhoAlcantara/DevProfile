@@ -194,11 +194,14 @@ export function ImageField({
   value,
   onChange,
   hint,
+  round = false,
 }: {
   label: string;
   value: string | null;
   onChange: (value: string | null) => void;
   hint?: string;
+  /** Shows the image as the site does for profile photos: a centered circle. */
+  round?: boolean;
 }) {
   const [open, setOpen] = useState(false);
   const url = value ? `/api/media/${value.replace(/^media:/, '')}` : null;
@@ -211,7 +214,12 @@ export function ImageField({
           <img
             src={url}
             alt=""
-            className="h-28 w-48 rounded-md border border-line object-cover object-top"
+            className={cn(
+              'border border-line object-cover',
+              round
+                ? 'size-28 rounded-full object-center'
+                : 'h-28 w-48 rounded-md object-top',
+            )}
           />
         ) : (
           <div className="flex h-28 w-48 items-center justify-center rounded-md border border-dashed border-line text-soft">

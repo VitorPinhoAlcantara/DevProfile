@@ -12,7 +12,7 @@
   --border-strong: rgb(15 23 42 / 0.2);
   --text: #0f1b2d;
   --muted: #4b5b70;
-  --soft: #7a8aa0;
+  --soft: #626e80;
   --accent: #2563eb;
   --accent-soft: rgb(37 99 235 / 0.1);
   --on-accent: #ffffff;
@@ -39,7 +39,7 @@
   --border-strong: rgb(148 163 184 / 0.28);
   --text: #e4ebf5;
   --muted: #9aabc0;
-  --soft: #66788f;
+  --soft: #77879b;
   --accent: #5ea7ff;
   --accent-soft: rgb(94 167 255 / 0.12);
   --on-accent: #06121f;
@@ -98,6 +98,21 @@ body {
 
 ::selection {
   background: var(--accent-soft);
+}
+
+p,
+li {
+  text-wrap: pretty;
+}
+
+/* Long paragraphs keep a readable measure; images, tables and code stay full width. */
+.prose-portfolio :is(p, ul, ol, blockquote) {
+  max-width: 56ch;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
 }
 
 :focus-visible {

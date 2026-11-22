@@ -151,22 +151,23 @@ const printable = (href: string) =>
     .replace(/^www\./, '')
     .replace(/\/$/, '');
 
-/**
- * Links that already carry a `?ref=` (visit tracking) get the CV language
- * appended, so the stats tell the Portuguese and English CVs apart:
- * `?ref=curriculo` becomes `?ref=curriculo-pt` / `?ref=curriculo-en`.
- */
-export function withCvRef(href: string, lang: 'pt' | 'en') {
-  if (!/^https?:\/\//.test(href)) return href;
-  const url = new URL(href);
-  const ref = url.searchParams.get('ref');
-  if (!ref) return href;
-  url.searchParams.set('ref', `${ref}-${lang}`);
-  return url.toString();
-}
+/** Rewrites a CV link; `key` names it (`github`, `p-streeturban`) for click stats. */
+export type CvLinker = (key: string, href: string) => string;
+
+const toKey = (text: string) =>
+  text
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
 
 /** Builds the CV from the canonical content, keeping only what is marked for the CV. */
-export function buildCvData(content: PortfolioContent, locale: Locale): CvData {
+export function buildCvData(
+  content: PortfolioContent,
+  locale: Locale,
+  link: CvLinker = (_, href) => href,
+): CvData {
   const lang = locale === 'en' ? 'en' : 'pt';
   const h = HEADINGS[lang];
   const { profile, settings } = content;
@@ -221,7 +222,7 @@ export function buildCvData(content: PortfolioContent, locale: Locale): CvData {
         c.kind === 'PHONE' || c.kind === 'EMAIL'
           ? c.href
           : c.href.startsWith('http')
-            ? withCvRef(c.href, lang)
+            ? link(c.kind.toLowerCase(), c.href)
             : null,
     })),
   ];
@@ -266,12 +267,12 @@ export function buildCvData(content: PortfolioContent, locale: Locale): CvData {
       const site = p.links.find((l) => l.kind === 'WEBSITE') ?? p.links[0];
       const stack = techStack(p.skills);
       return {
-        name: p.name,
+        name: lang === 'en' ? (p.nameEn ?? p.name) : p.name,
         stack: stack.length ? stack.join(', ') : null,
         link: site
           ? {
               text: printable(site.href.split('?')[0]),
-              url: withCvRef(site.href, lang),
+              url: link(`p-${p.slug}`, site.href),
             }
           : null,
         period: p.period ? cvPeriod(p.period, lang) : null,
@@ -299,11 +300,24 @@ export function buildCvData(content: PortfolioContent, locale: Locale): CvData {
         ? `${cvDate(c.issuedAt, lang)} – ${cvDate(c.expiresAt, lang)}`
         : cvDate(c.issuedAt, lang),
       link: c.credentialUrl
-        ? { text: lang === 'en' ? 'verify' : 'verificar', url: c.credentialUrl }
+        ? {
+            text: lang === 'en' ? 'verify' : 'verificar',
+            url: link(`cert-${toKey(c.name)}`, c.credentialUrl),
+          }
         : null,
     })),
     languages: cv(content.languages).map(
       (l) => `${l.name[lang]} (${LEVELS[l.level]![lang]})`,
     ),
   };
+}
+
+/** Every external link the CV prints, by key: what `/r/<slug>/<key>` redirects to. */
+export function cvLinkTargets(content: PortfolioContent): Map<string, string> {
+  const targets = new Map<string, string>();
+  buildCvData(content, 'pt-BR', (key, href) => {
+    targets.set(key, href);
+    return href;
+  });
+  return targets;
 }

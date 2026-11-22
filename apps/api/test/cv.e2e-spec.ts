@@ -3,7 +3,7 @@ import request from 'supertest';
 import { extractText } from 'unpdf';
 import { portfolioSchema } from '@devprofile/shared';
 import { CvService } from '../src/cv/cv.service.js';
-import { buildCvData, withCvRef } from '../src/cv/cv-data.js';
+import { buildCvData, cvLinkTargets } from '../src/cv/cv-data.js';
 import type { PrismaClient } from '../src/generated/prisma/client.js';
 import { portfolioSeed } from '../prisma/seed-data.js';
 import { createTestApp, createTestPrisma, loadSeed } from './utils.js';
@@ -98,22 +98,19 @@ describe('CV (e2e)', () => {
     expect(data.headings.intro).toBe('Objetivo');
   });
 
-  it('tags tracked links with the CV language and leaves the rest alone', () => {
-    expect(withCvRef('https://alcantara.dev.br/?ref=curriculo', 'en')).toBe(
-      'https://alcantara.dev.br/?ref=curriculo-en',
-    );
-    expect(withCvRef('https://github.com/user', 'pt')).toBe(
-      'https://github.com/user',
-    );
-    expect(withCvRef('mailto:a@b.com', 'pt')).toBe('mailto:a@b.com');
-
+  it('names every external CV link so a short link can route it', () => {
     const content = portfolioSchema.parse(portfolioSeed);
-    const site = content.contacts.find((c) => c.kind === 'WEBSITE')!;
-    site.href = 'https://alcantara.dev.br/?ref=curriculo';
-    site.showOnCv = true;
-    const data = buildCvData(content, 'pt-BR');
+    const targets = cvLinkTargets(content);
+    expect(targets.get('github')).toMatch(/^https:\/\/github\.com\//);
+    expect(targets.get('linkedin')).toMatch(/linkedin\.com/);
+    expect([...targets.values()].every((href) => href.startsWith('http'))).toBe(
+      true,
+    );
+
+    const data = buildCvData(content, 'en', (key) => `/r/x/${key}`);
+    expect(data.contacts.map((c) => c.url)).toContain('/r/x/github');
     expect(data.contacts.map((c) => c.url)).toContain(
-      'https://alcantara.dev.br/?ref=curriculo-pt',
+      'mailto:vitoralcantara1722@gmail.com',
     );
   });
 
