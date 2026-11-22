@@ -36,9 +36,10 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       type: 'profile',
       title: t('title'),
       description: t('description'),
+      url: locale === routing.defaultLocale ? '/' : `/${locale}`,
       locale: locale === 'en' ? 'en_US' : 'pt_BR',
-      images: ['/profile-photo.jpeg'],
     },
+    twitter: { card: 'summary_large_image' },
   };
 }
 

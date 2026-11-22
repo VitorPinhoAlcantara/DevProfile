@@ -33,6 +33,21 @@ report() {
     log "could not report to Gatus"
 }
 
+INDEXNOW_KEY=21883f2d2e6887504e5d7aa19233ff72
+
+indexnow() {
+  local site urls
+  site="$(env_value SITE_URL)"
+  [[ "$site" == https://* ]] || return 0
+  urls="$(curl -fsS "$site/sitemap.xml" | grep -o '<loc>[^<]*' | sed 's/<loc>//')" || return 0
+  [[ -n "$urls" ]] || return 0
+  python3 -c 'import json,sys; site,key=sys.argv[1:3]; print(json.dumps({"host": site.split("//")[1], "key": key, "keyLocation": f"{site}/{key}.txt", "urlList": sys.stdin.read().split()}))' \
+    "$site" "$INDEXNOW_KEY" <<< "$urls" |
+    curl -fsS -X POST -H 'Content-Type: application/json; charset=utf-8' \
+      --data @- -o /dev/null https://api.indexnow.org/indexnow ||
+    log "IndexNow did not take the update"
+}
+
 revision() {
   docker image inspect "$1" \
     --format '{{index .Config.Labels "org.opencontainers.image.revision"}}'
@@ -54,12 +69,9 @@ current="$(env_value DEVPROFILE_VERSION)"
 target="${1:-}"
 
 if [[ -z "$target" ]]; then
-  # CI publishes the three images in parallel; only deploy once all of them
-  # point at the same commit.
   revisions=()
   for image in "${IMAGES[@]}"; do
     if ! docker pull -q "$REGISTRY/$image:main" > /dev/null 2>&1; then
-      # Nothing published yet, or GHCR unreachable: try again on the next run.
       log "could not pull $image:main"
       exit 0
     fi
@@ -85,7 +97,7 @@ if start "$target"; then
   set_version "$target"
   log "deployed ${target:0:7}"
   report true
-  # Keep the images of the last few deploys for rollbacks; drop older ones.
+  indexnow
   for image in "${IMAGES[@]}"; do
     docker images "$REGISTRY/$image" --format '{{.Tag}}' |
       grep -E '^[0-9a-f]{40}$' | tail -n +4 |
@@ -97,7 +109,6 @@ fi
 
 log "${target:0:7} did not come up healthy"
 if [[ -n "$current" && "$current" != "local" ]]; then
-  # The database is not rolled back: a migration that already ran stays.
   start "$current" && log "rolled back to ${current:0:7}"
 fi
 report false "${target:0:7} não subiu; voltou para ${current:0:7}"

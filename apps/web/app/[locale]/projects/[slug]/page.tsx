@@ -29,11 +29,29 @@ async function loadProject(slug: string, locale: Locale) {
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { locale, slug } = await params;
   const { data: project } = await loadProject(slug, locale);
+  const path = locale === 'en' ? `/en/projects/${slug}` : `/projects/${slug}`;
+  const images = project.coverUrl
+    ? [{ url: `${project.coverUrl}?w=1280`, alt: project.name }]
+    : undefined;
   return {
     title: project.name,
     description: project.tagline,
+    openGraph: {
+      type: 'article',
+      title: project.name,
+      description: project.tagline,
+      url: path,
+      locale: locale === 'en' ? 'en_US' : 'pt_BR',
+      ...(images && { images }),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: project.name,
+      description: project.tagline,
+      ...(images && { images }),
+    },
     alternates: {
-      canonical: locale === 'en' ? `/en/projects/${slug}` : `/projects/${slug}`,
+      canonical: path,
       languages: {
         'pt-BR': `/projects/${slug}`,
         en: `/en/projects/${slug}`,
